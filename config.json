@@ -1,0 +1,15 @@
+{
+  "topicCount":100,
+  "interestTopicCount":20,
+  "ldaThreadHold":0.05,
+  "runModule": {
+    "FilterDocTest1": true,
+    "FilterDocTest2": true,
+    "ExtractTest": true,
+    "UISTest1": true,
+    "UISTest2": true,
+    "ItemPredictorMultiTest1": true,
+    "ItemPredictorMultiTest2": true
+  },
+  "dynamicThread":true
+}
