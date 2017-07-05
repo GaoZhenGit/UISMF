@@ -45,7 +45,7 @@ public class ItemPredictorMultiTest {
 
         System.out.println("How many Topics? " + args[2]);
         Parameter.L = (short) Integer.parseInt(args[2]);
-        Parameter.LAssign = Integer.parseInt(args[2]);
+//        Parameter.LAssign = Integer.parseInt(args[2]);
         System.out.println("How many interest Topics?" + args[3]);
         Parameter.iL = Integer.parseInt(args[3]);
 
@@ -81,40 +81,65 @@ public class ItemPredictorMultiTest {
         File file = new File(precDataPath);
         file.delete();
 
-        ExecutorService exec = Executors.newFixedThreadPool(5);
+        ExecutorService exec = Executors.newFixedThreadPool((int) Math.sqrt(Parameter.L));
         List<Future<WRMF>> mfResults = new ArrayList<>();
         int counter = 0;
         if (args[1].equals("2")) {
-            int sysTheadSize = 8;
-            for (int j = 0; j < Parameter.L / sysTheadSize + 1; j++) {
-                for (int i = 0; i < sysTheadSize; i++) {
-                    int t_no = j * 8 + i;
-                    if (t_no >= Parameter.L) break;
-                    WRMF recommender = new WRMF();
-                    IPosOnlyFeedback training_data = ItemData.read(trainingDataDir + Parameter.cname + t_no,
-                            null, null, false);
-                    training_data_list.add(training_data);
-                    recommender.setFeedback(training_data);
-                    WRMFThread mfThread = new WRMFThread(recommender,
-                            Parameter.IFMFPath + medium + "." + t_no,
-                            medium, testData, t_no);
-                    mfResults.add(exec.submit(mfThread));
-                }
-                for (int i = 0; i < sysTheadSize; i++) {
-                    int t_no = j * 8 + i;
-                    if (t_no >= Parameter.L) break;
-                    Future<WRMF> mf = mfResults.get(t_no);
-                    try {
-                        mf.get();
-                        System.out.println("tranning done" + counter++);
-                        // MFList.add(recommender);
-                        // save models to files for further usage.
-                    } catch (Exception e) {
-                        System.err.println(e);
-                    } finally {
-                    }
+            for (int t_no = 0; t_no < Parameter.L; t_no++) {
+                WRMF recommender = new WRMF();
+
+                IPosOnlyFeedback training_data = ItemData.read(trainingDataDir + Parameter.cname + t_no,
+                        null, null, false);
+                training_data_list.add(training_data);
+                recommender.setFeedback(training_data);
+                WRMFThread mfThread = new WRMFThread(recommender,
+                        Parameter.IFMFPath + medium + "." + t_no,
+                        medium, testData, t_no);
+                mfResults.add(exec.submit(mfThread));
+            }
+
+            for (int i = 0; i < Parameter.L; i++) {
+                Future<WRMF> mf = mfResults.get(i);
+                try {
+                    mf.get();
+                    System.out.println("tranning done" + counter++);
+                    // MFList.add(recommender);
+                    // save models to files for further usage.
+                } catch (Exception e) {
+                    System.err.println(e);
+                } finally {
                 }
             }
+//            int sysTheadSize = 8;
+//            for (int j = 0; j < Parameter.L / sysTheadSize + 1; j++) {
+//                for (int i = 0; i < sysTheadSize; i++) {
+//                    int t_no = j * 8 + i;
+//                    if (t_no >= Parameter.L) break;
+//                    WRMF recommender = new WRMF();
+//                    IPosOnlyFeedback training_data = ItemData.read(trainingDataDir + Parameter.cname + t_no,
+//                            null, null, false);
+//                    training_data_list.add(training_data);
+//                    recommender.setFeedback(training_data);
+//                    WRMFThread mfThread = new WRMFThread(recommender,
+//                            Parameter.IFMFPath + medium + "." + t_no,
+//                            medium, testData, t_no);
+//                    mfResults.add(exec.submit(mfThread));
+//                }
+//                for (int i = 0; i < sysTheadSize; i++) {
+//                    int t_no = j * 8 + i;
+//                    if (t_no >= Parameter.L) break;
+//                    Future<WRMF> mf = mfResults.get(t_no);
+//                    try {
+//                        mf.get();
+//                        System.out.println("tranning done" + counter++);
+//                        // MFList.add(recommender);
+//                        // save models to files for further usage.
+//                    } catch (Exception e) {
+//                        System.err.println(e);
+//                    } finally {
+//                    }
+//                }
+//            }
             exec.shutdown();
 
             System.gc();

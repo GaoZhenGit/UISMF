@@ -8,6 +8,7 @@ import org.social.util.Parameter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -18,6 +19,8 @@ public class Runner {
         Config config = getConfig(args[0]);
 
         LDAParameter.K = config.topicCount;
+        File file = new File("time" + System.currentTimeMillis() + ".txt");
+        PrintWriter timeRecorder = new PrintWriter(file);
         if (config.runModule.FilterDocTest1) {
             FilterDocTest.main(new String[]{"1", "0.01"});
         }
@@ -31,9 +34,12 @@ public class Runner {
         }
 
         if (config.runModule.UISTest1) {
+            long start = System.currentTimeMillis();
             UISTest.main(new String[]{"2",
                     String.valueOf(config.topicCount),
                     String.valueOf(config.ldaThreadHold), "0.01"});
+            long end = System.currentTimeMillis();
+            recordTime(start, end, "lda", timeRecorder);
         }
 
         if (config.runModule.UISTest2) {
@@ -41,9 +47,12 @@ public class Runner {
         }
 
         if (config.runModule.ItemPredictorMultiTest1) {
+            long start = System.currentTimeMillis();
             ItemPredictorMultiTest.main(new String[]{"2", "2",
                     String.valueOf(config.topicCount),
                     String.valueOf(config.interestTopicCount), "0"});
+            long end = System.currentTimeMillis();
+            recordTime(start, end, "mf", timeRecorder);
         }
 
         if (config.runModule.ItemPredictorMultiTest2) {
@@ -51,6 +60,8 @@ public class Runner {
                     String.valueOf(config.topicCount),
                     String.valueOf(config.interestTopicCount), "0"});
         }
+        timeRecorder.flush();
+        timeRecorder.close();
     }
 
     private static Config getConfig(String path) throws FileNotFoundException {
@@ -63,5 +74,11 @@ public class Runner {
         String configString = stringBuilder.toString();
         Config config = JSON.parseObject(configString, Config.class);
         return config;
+    }
+
+    private static void recordTime(long start, long end, String op, PrintWriter writer) {
+        long spendTime = end - start;
+        String line = op + ":" + spendTime + "\n";
+        writer.write(line);
     }
 }
