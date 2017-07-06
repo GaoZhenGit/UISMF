@@ -10,6 +10,7 @@ public class Config {
     public RunModule runModule;
     public boolean dynamicThread;
     public double ldaThreadHold;
+    public int ldaIter;
 
 
     @JSONType

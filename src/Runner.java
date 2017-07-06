@@ -19,6 +19,7 @@ public class Runner {
         Config config = getConfig(args[0]);
 
         LDAParameter.K = config.topicCount;
+        LDAParameter.iterations = config.ldaIter;
         File file = new File("time" + System.currentTimeMillis() + ".txt");
         PrintWriter timeRecorder = new PrintWriter(file);
         if (config.runModule.FilterDocTest1) {

@@ -1,7 +1,8 @@
 {
   "topicCount":100,
   "interestTopicCount":20,
-  "ldaThreadHold":0.05,
+  "ldaThreadHold":0.001,
+  "ldaIter":101,
   "runModule": {
     "FilterDocTest1": true,
     "FilterDocTest2": true,
