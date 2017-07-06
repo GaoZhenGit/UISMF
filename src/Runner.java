@@ -20,7 +20,10 @@ public class Runner {
 
         LDAParameter.K = config.topicCount;
         LDAParameter.iterations = config.ldaIter;
-        File file = new File("time" + System.currentTimeMillis() + ".txt");
+        File file = new File("data/time/" + System.currentTimeMillis() + ".txt");
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+        }
         PrintWriter timeRecorder = new PrintWriter(file);
         if (config.runModule.FilterDocTest1) {
             FilterDocTest.main(new String[]{"1", "0.01"});
