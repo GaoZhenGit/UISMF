@@ -70,9 +70,7 @@ public class ItemPredictorMultiTest {
         String testDataPath = Parameter.testDataPath;
         String orgTestDataPath = "data/keepdata.txt";
 
-        IPosOnlyFeedback traningData = ItemData.read(orgTestDataPath, null, null, false);
         IPosOnlyFeedback testData = ItemData.read(testDataPath, null, null, false);
-        List<IPosOnlyFeedback> training_data_list = new ArrayList<IPosOnlyFeedback>();
 
         // read c.F & c.G into data
         CommunityData communityData = new CommunityData(medium);
@@ -88,13 +86,8 @@ public class ItemPredictorMultiTest {
         int counter = 0;
         if (args[1].equals("2")) {
             for (int t_no = 0; t_no < Parameter.L; t_no++) {
-                WRMF recommender = new WRMF();
-
-                IPosOnlyFeedback training_data = ItemData.read(trainingDataDir + Parameter.cname + t_no,
-                        null, null, false);
-                training_data_list.add(training_data);
-                recommender.setFeedback(training_data);
-                WRMFThread mfThread = new WRMFThread(recommender,
+                String trainingDataName = trainingDataDir + Parameter.cname + t_no;
+                WRMFThread mfThread = new WRMFThread(trainingDataName,
                         Parameter.IFMFPath + medium + "." + t_no,
                         medium, testData, t_no);
                 mfResults.add(exec.submit(mfThread));
@@ -149,29 +142,29 @@ public class ItemPredictorMultiTest {
             idUtil.IDToIndexMap = TwitterIDUtil.IDToIndexMap;
             idUtil.indexToIDMap = TwitterIDUtil.indexToIDMap;
             idUtil.write();
-            return;
-        }
+        } else {
+            IPosOnlyFeedback traningData = ItemData.read(orgTestDataPath, null, null, false);
 
-        IDUtil idUtil = new IDUtil();
-        idUtil = idUtil.read();
-        TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
-        TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
+            IDUtil idUtil = new IDUtil();
+            idUtil = idUtil.read();
+            TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
+            TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
 
-        List<IRecommender> recommenderList = new ArrayList<IRecommender>();
+            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
 
-        training_data_list = new ArrayList<IPosOnlyFeedback>();
-        for (int i = 0; i < Parameter.L; i++) {
-            IPosOnlyFeedback training_data = ItemData.read(trainingDataDir
-                    + Parameter.cname + i, null, null, false);
-            //数据集为空时,执行下一个
-            if (training_data.userMatrix().numberOfEntries() == 0) continue;
-            training_data_list.add(training_data);
-            WRMF recommender = new WRMF();
-            recommender.loadModel(Parameter.IFMFPath + medium + "." + i);
-            recommenderList.add(recommender);
-            System.out.println("tranning" + i);
-        }
-        Parameter.L = (short) (training_data_list.size());  //Community的数量
+            List<IPosOnlyFeedback> training_data_list = new ArrayList<IPosOnlyFeedback>();
+            for (int i = 0; i < Parameter.L; i++) {
+                IPosOnlyFeedback training_data = ItemData.read(trainingDataDir
+                        + Parameter.cname + i, null, null, false);
+                //数据集为空时,执行下一个
+                if (training_data.userMatrix().numberOfEntries() == 0) continue;
+                training_data_list.add(training_data);
+                WRMF recommender = new WRMF();
+                recommender.loadModel(Parameter.IFMFPath + medium + "." + i);
+                recommenderList.add(recommender);
+                System.out.println("tranning" + i);
+            }
+            Parameter.L = (short) (training_data_list.size());  //Community的数量
 
 //    public static ItemRecommendationEvaluationResults evaluate(
 //   			List<IRecommender> recommenderList, 
@@ -184,9 +177,10 @@ public class ItemPredictorMultiTest {
 //    			Boolean repeated_events,
 //    			CommunityData communityData, 
 //    			String medium)
-        evaluate(recommenderList, traningData, testData, training_data_list,
-                testData.allUsers(), testData.allItems(), null, null, communityData,
-                medium);
+            evaluate(recommenderList, traningData, testData, training_data_list,
+                    testData.allUsers(), testData.allItems(), null, null, communityData,
+                    medium);
+        }
     }
 
     public static void saveprec(String medium, IPosOnlyFeedback testData,

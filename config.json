@@ -12,5 +12,6 @@
     "ItemPredictorMultiTest1": true,
     "ItemPredictorMultiTest2": true
   },
-  "dynamicThread":true
+  "dynamicThread":false,
+  "threadCount":1
 }
