@@ -40,7 +40,7 @@ public class Runner {
         if (config.runModule.UISTest1) {
             long start = System.currentTimeMillis();
             UISTest.main(new String[]{"2",
-                    String.valueOf(config.topicCount),
+                    String.valueOf(config.interestTopicCount),
                     String.valueOf(config.ldaThreadHold), "0.01"});
             long end = System.currentTimeMillis();
             recordTime(start, end, "lda", timeRecorder);
@@ -48,6 +48,12 @@ public class Runner {
 
         if (config.runModule.UISTest2) {
             UISTest.main(new String[]{"2", "read", String.valueOf(config.ldaThreadHold)});
+        }
+
+        if (config.dynamicThread) {
+            ItemPredictorMultiTest.threadCount = (int) Math.sqrt(config.topicCount);
+        } else {
+            ItemPredictorMultiTest.threadCount = config.threadCount;
         }
 
         if (config.runModule.ItemPredictorMultiTest1) {

@@ -39,6 +39,8 @@ import chosen.social.lda.util.TwitterIDUtil;
 
 public class ItemPredictorMultiTest {
 
+    public static int threadCount = 1;
+
     public static void main(String args[]) throws Exception {
 
         // !!!!should save models to disk
@@ -81,7 +83,7 @@ public class ItemPredictorMultiTest {
         File file = new File(precDataPath);
         file.delete();
 
-        ExecutorService exec = Executors.newFixedThreadPool((int) Math.sqrt(Parameter.L));
+        ExecutorService exec = Executors.newFixedThreadPool(threadCount);
         List<Future<WRMF>> mfResults = new ArrayList<>();
         int counter = 0;
         if (args[1].equals("2")) {

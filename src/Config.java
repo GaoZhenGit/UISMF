@@ -11,6 +11,7 @@ public class Config {
     public boolean dynamicThread;
     public double ldaThreadHold;
     public int ldaIter;
+    public int threadCount;
 
 
     @JSONType
