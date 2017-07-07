@@ -44,9 +44,9 @@ public class WRMFThread implements Callable<WRMF> {
     public WRMF call() {
         try {
             if (mf == null) {
-                WRMF wrmf = new WRMF();
+                mf = new WRMF();
                 IPosOnlyFeedback training_data = ItemData.read(mfPath, null, null, false);
-                wrmf.setFeedback(training_data);
+                mf.setFeedback(training_data);
             }
             mf.train();
             mf.saveModel(savePath);
