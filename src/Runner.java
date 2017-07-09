@@ -51,9 +51,11 @@ public class Runner {
         }
 
         if (config.dynamicThread) {
-            ItemPredictorMultiTest.threadCount = (int) Math.sqrt(config.topicCount);
+            ItemPredictorMultiTest.mfThreadCount = (int) Math.sqrt(config.topicCount);
+            ItemPredictorMultiTest.sumThreadCount = (int) Math.sqrt(config.topicCount);
         } else {
-            ItemPredictorMultiTest.threadCount = config.threadCount;
+            ItemPredictorMultiTest.mfThreadCount = config.mfThreadCount;
+            ItemPredictorMultiTest.sumThreadCount = config.sumThreadCount;
         }
 
         if (config.runModule.ItemPredictorMultiTest1) {

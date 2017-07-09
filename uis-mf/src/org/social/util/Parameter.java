@@ -13,4 +13,5 @@ public class Parameter {
   public static String trainingDataPath = "data/keepdata.txt";
   public static String BPRPath = "data/LdaResult/wb/BPRMF/BPRMF.";
   public static String kLPath = "data/LdaResult/wb/KL/";
+  public static String recommenderCachePath = "data/LdaResult/recommendercache/r";
 }

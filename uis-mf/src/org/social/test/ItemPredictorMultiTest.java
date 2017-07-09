@@ -1,9 +1,6 @@
 package org.social.test;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,10 +24,8 @@ import org.mymedialite.eval.ItemRecommendationEvaluationResults;
 import org.mymedialite.eval.Items;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.WRMF;
-import org.social.util.Parameter;
-import org.social.util.Predictor;
-import org.social.util.PredictorParameter;
-import org.social.util.WRMFThread;
+import org.social.ser.WRMFser;
+import org.social.util.*;
 import org.social.util.QuickTopN.PairComparable;
 
 import chosen.social.lda.util.CommunityData;
@@ -39,7 +34,8 @@ import chosen.social.lda.util.TwitterIDUtil;
 
 public class ItemPredictorMultiTest {
 
-    public static int threadCount = 1;
+    public static int mfThreadCount = 1;
+    public static int sumThreadCount = 1;
 
     public static void main(String args[]) throws Exception {
 
@@ -81,10 +77,10 @@ public class ItemPredictorMultiTest {
         File file = new File(precDataPath);
         file.delete();
 
-        ExecutorService exec = Executors.newFixedThreadPool(threadCount);
-        List<Future<WRMF>> mfResults = new ArrayList<>();
         int counter = 0;
         if (args[1].equals("2")) {
+            ExecutorService exec = Executors.newFixedThreadPool(mfThreadCount);
+            List<Future<WRMF>> mfResults = new ArrayList<>();
             for (int t_no = 0; t_no < Parameter.L; t_no++) {
                 String trainingDataName = trainingDataDir + Parameter.cname + t_no;
                 WRMFThread mfThread = new WRMFThread(trainingDataName,
@@ -150,19 +146,24 @@ public class ItemPredictorMultiTest {
             TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
             TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
 
-            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
+//            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
 
             List<IPosOnlyFeedback> training_data_list = new ArrayList<IPosOnlyFeedback>();
             for (int i = 0; i < Parameter.L; i++) {
                 IPosOnlyFeedback training_data = ItemData.read(trainingDataDir
                         + Parameter.cname + i, null, null, false);
                 //数据集为空时,执行下一个
-                if (training_data.userMatrix().numberOfEntries() == 0) continue;
+                if (training_data.userMatrix().numberOfEntries() == 0) {
+                    continue;
+                }
                 training_data_list.add(training_data);
-                WRMF recommender = new WRMF();
+                WRMFser recommender = new WRMFser();
                 recommender.loadModel(Parameter.IFMFPath + medium + "." + i);
-                recommenderList.add(recommender);
+//                recommenderList.add(recommender);
                 System.out.println("tranning" + i);
+                FileCacheUtil.saveDiskCache(recommender, Parameter.recommenderCachePath + i);
+                recommender = null;
+                System.gc();
             }
             Parameter.L = (short) (training_data_list.size());  //Community的数量
 
@@ -177,7 +178,7 @@ public class ItemPredictorMultiTest {
 //    			Boolean repeated_events,
 //    			CommunityData communityData, 
 //    			String medium)
-            evaluate(recommenderList, traningData, testData, training_data_list,
+            evaluate(null, traningData, testData, training_data_list,
                     testData.allUsers(), testData.allItems(), null, null, communityData,
                     medium);
         }
@@ -282,11 +283,16 @@ public class ItemPredictorMultiTest {
     }
 
     public static ItemRecommendationEvaluationResults evaluate(
-            List<IRecommender> recommenderList, IPosOnlyFeedback orgTraining,
-            IPosOnlyFeedback test, List<IPosOnlyFeedback> training,
-            Collection<Integer> test_users, Collection<Integer> candidate_items,
-            CandidateItems candidate_item_mode, Boolean repeated_events,
-            CommunityData communityData, String medium) throws IOException {
+            List<IRecommender> recommenderList,
+            IPosOnlyFeedback orgTraining,
+            IPosOnlyFeedback test,
+            List<IPosOnlyFeedback> training,
+            Collection<Integer> test_users,
+            Collection<Integer> candidate_items,
+            CandidateItems candidate_item_mode,
+            Boolean repeated_events,
+            CommunityData communityData,
+            String medium) throws IOException {
 
         if (candidate_item_mode == null)
             candidate_item_mode = CandidateItems.OVERLAP;
@@ -314,7 +320,14 @@ public class ItemPredictorMultiTest {
         }
         List<Predictor> predictors = new ArrayList<>();
         List<Future<PredictorParameter>> ppResults = new ArrayList<>();
-        ExecutorService exec = Executors.newCachedThreadPool();
+        ExecutorService exec = Executors.newFixedThreadPool(sumThreadCount);
+        recommenderList = new ArrayList<>();
+        //读取缓存类
+        for (int i = 0; i < Parameter.L; i++) {
+            IRecommender recommender = (IRecommender) FileCacheUtil.loadDiskCache(Parameter.recommenderCachePath + i);
+            recommenderList.add(recommender);
+        }
+        System.out.println("read cache finish");
 
         for (int i = 0; i < userAllocationList.size(); i++) {
             Predictor predictor = new Predictor(recommenderList,
