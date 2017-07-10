@@ -1,4 +1,5 @@
 import chosen.nlp.lda.conf.LDAParameter;
+import chosen.nlp.lda.conf.PathConfig;
 import chosen.nlp.lda.test.ExtractTest;
 import chosen.nlp.lda.test.FilterDocTest;
 import chosen.nlp.lda.test.UISTest;
@@ -20,6 +21,11 @@ public class Runner {
 
         LDAParameter.K = config.topicCount;
         LDAParameter.iterations = config.ldaIter;
+
+        if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
+            PathConfig.twitterUserLinksFile = config.dataSetPath;
+        }
+
         File file = new File("data/time/" + System.currentTimeMillis() + ".txt");
         if (!file.exists()) {
             file.getParentFile().mkdir();
@@ -68,9 +74,12 @@ public class Runner {
         }
 
         if (config.runModule.ItemPredictorMultiTest2) {
+            long start = System.currentTimeMillis();
             ItemPredictorMultiTest.main(new String[]{"2", "1",
                     String.valueOf(config.topicCount),
                     String.valueOf(config.interestTopicCount), "0"});
+            long end = System.currentTimeMillis();
+            recordTime(start, end, "sum", timeRecorder);
         }
         timeRecorder.flush();
         timeRecorder.close();

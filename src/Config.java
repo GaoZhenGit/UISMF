@@ -13,6 +13,7 @@ public class Config {
     public int ldaIter;
     public int mfThreadCount;
     public int sumThreadCount;
+    public String dataSetPath;
 
 
     @JSONType

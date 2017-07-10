@@ -1,4 +1,5 @@
 {
+  "dataSetPath":"data/LdaTrainSet/wb_small.txt",
   "topicCount":100,
   "interestTopicCount":20,
   "ldaThreadHold":0.001,
