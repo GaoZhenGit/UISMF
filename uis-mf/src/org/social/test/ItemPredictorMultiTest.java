@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,11 +78,17 @@ public class ItemPredictorMultiTest {
 
         int counter = 0;
         if (args[1].equals("2")) {
+
             ExecutorService exec = Executors.newFixedThreadPool(mfThreadCount);
             List<Future<WRMF>> mfResults = new ArrayList<>();
             for (int t_no = 0; t_no < Parameter.L; t_no++) {
                 String trainingDataName = trainingDataDir + Parameter.cname + t_no;
-                WRMFThread mfThread = new WRMFThread(trainingDataName,
+                String trainingDataMap = trainingDataDir + Parameter.cmap + t_no;
+                String trainingDataIndex = trainingDataDir + Parameter.cindex + t_no;
+
+                MfIdMaper.idToIndex(trainingDataName, trainingDataIndex, trainingDataMap);
+
+                WRMFThread mfThread = new WRMFThread(trainingDataIndex,
                         Parameter.IFMFPath + medium + "." + t_no,
                         medium, testData, t_no);
                 mfResults.add(exec.submit(mfThread));
