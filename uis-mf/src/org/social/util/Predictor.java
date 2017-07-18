@@ -33,6 +33,7 @@ public class Predictor implements Callable<PredictorParameter> {
     private List<Integer> user_id_queue;
     private List<IBooleanMatrix> userMatrixs = new ArrayList<>(50);
     private List<IntList> allItems = new ArrayList<>(50);
+    List<IPosOnlyFeedback> training;
     //iL is size of interest topics
 
 
@@ -67,6 +68,11 @@ public class Predictor implements Callable<PredictorParameter> {
         test_user_matrix = test.userMatrix();
         pp = new PredictorParameter();
         this.user_id_queue = user_id_queue;
+        this.training = training;
+    }
+
+    @Override
+    public PredictorParameter call() {
 
         for (int i = 0; i < Parameter.L; i++) {
             IBooleanMatrix training_user_matrix = training.get(i).userMatrix();
@@ -74,11 +80,9 @@ public class Predictor implements Callable<PredictorParameter> {
             IntList intList = training.get(i).allItems();
             allItems.add(intList);
         }
-    }
+        training = null;
+        System.gc();
 
-    @Override
-    public PredictorParameter call() {
-        // TODO Auto-generated method stub
         for (Integer user_id : user_id_queue) {
             predict(user_id);
         }

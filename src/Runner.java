@@ -24,6 +24,7 @@ public class Runner {
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
             PathConfig.twitterUserLinksFile = config.dataSetPath;
+            System.out.println("load dataset:" + config.dataSetPath);
         }
 
         File file = new File("data/time/" + System.currentTimeMillis() + ".txt");
