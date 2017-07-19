@@ -3,10 +3,12 @@ package org.social.util;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import org.mymedialite.data.EntityMapping;
 import org.mymedialite.data.IPosOnlyFeedback;
 import org.mymedialite.eval.Items;
 import org.mymedialite.io.ItemData;
@@ -20,6 +22,10 @@ public class WRMFThread implements Callable<WRMF> {
     String medium;
     IPosOnlyFeedback testData;
     int tnum;
+    EntityMapping userMapping;
+    String userMapPath;
+    EntityMapping itemMapping;
+    String itemMapPath;
 
     public WRMFThread(WRMF wrmf,
                       String path, String medium,
@@ -31,10 +37,16 @@ public class WRMFThread implements Callable<WRMF> {
         this.tnum = tnum;
     }
 
-    public WRMFThread(String dataPath, String path, String medium,
+    public WRMFThread(String dataPath,
+                      String path,
+                      String userMapPath,
+                      String itemMapPath,
+                      String medium,
                       IPosOnlyFeedback testData, int tnum) throws Exception {
         mfPath = dataPath;
         savePath = path;
+        this.userMapPath = userMapPath;
+        this.itemMapPath = itemMapPath;
         this.medium = medium;
         this.testData = testData;
         this.tnum = tnum;
@@ -45,8 +57,24 @@ public class WRMFThread implements Callable<WRMF> {
         try {
             if (mf == null) {
                 mf = new WRMF();
-                IPosOnlyFeedback training_data = ItemData.read(mfPath, null, null, false);
+                userMapping = new EntityMapping();
+                itemMapping = new EntityMapping();
+                IPosOnlyFeedback training_data = ItemData.read(mfPath, userMapping, itemMapping, false);
+
+                PrintWriter userWriter = new PrintWriter(userMapPath);
+                userMapping.saveMapping(userWriter);
+                userWriter.flush();
+                userWriter.close();
+
+                PrintWriter itemWriter = new PrintWriter(itemMapPath);
+                itemMapping.saveMapping(itemWriter);
+                itemWriter.flush();
+                itemWriter.close();
+
                 mf.setFeedback(training_data);
+
+                userMapping = null;
+                itemMapping = null;
             }
             mf.train();
             mf.saveModel(savePath);

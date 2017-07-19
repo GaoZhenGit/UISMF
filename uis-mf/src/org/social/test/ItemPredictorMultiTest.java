@@ -83,13 +83,15 @@ public class ItemPredictorMultiTest {
             List<Future<WRMF>> mfResults = new ArrayList<>();
             for (int t_no = 0; t_no < Parameter.L; t_no++) {
                 String trainingDataName = trainingDataDir + Parameter.cname + t_no;
-                String trainingDataMap = trainingDataDir + Parameter.cmap + t_no;
-                String trainingDataIndex = trainingDataDir + Parameter.cindex + t_no;
+                String savePath = Parameter.IFMFPath + medium + "." + t_no;
+                String userMapPath = trainingDataDir + Parameter.cfmap + t_no;
+                String itemMapPath = trainingDataDir + Parameter.cgmap + t_no;
 
-                MfIdMaper.idToIndex(trainingDataName, trainingDataIndex, trainingDataMap);
-
-                WRMFThread mfThread = new WRMFThread(trainingDataIndex,
-                        Parameter.IFMFPath + medium + "." + t_no,
+                WRMFThread mfThread = new WRMFThread(
+                        trainingDataName,
+                        savePath,
+                        userMapPath,
+                        itemMapPath,
                         medium, testData, t_no);
                 mfResults.add(exec.submit(mfThread));
             }
