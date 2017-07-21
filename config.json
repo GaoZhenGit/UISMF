@@ -4,6 +4,8 @@
   "interestTopicCount":20,
   "ldaThreadHold":0.001,
   "ldaIter":101,
+  "mfFactors":15,
+  "mfIter":10,
   "runModule": {
     "FilterDocTest1": true,
     "FilterDocTest2": true,

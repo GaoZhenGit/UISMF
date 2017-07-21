@@ -4,6 +4,8 @@ public class Parameter {
   public static short L = 15; 
   public static int iL = 10;
   public static int LAssign = 20;
+  public static int mfFactors = 10;
+  public static int mfIter = 10;
   public static String cname = "c_";
   public static String cfmap = "c_fmap";
   public static String cgmap = "c_gmap";

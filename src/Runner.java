@@ -21,6 +21,8 @@ public class Runner {
 
         LDAParameter.K = config.topicCount;
         LDAParameter.iterations = config.ldaIter;
+        Parameter.mfFactors = config.mfFactors;
+        Parameter.mfIter = config.mfIter;
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
             PathConfig.twitterUserLinksFile = config.dataSetPath;

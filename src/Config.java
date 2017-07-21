@@ -11,6 +11,8 @@ public class Config {
     public boolean dynamicThread;
     public double ldaThreadHold;
     public int ldaIter;
+    public int mfFactors;
+    public int mfIter;
     public int mfThreadCount;
     public int sumThreadCount;
     public String dataSetPath;

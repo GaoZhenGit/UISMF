@@ -57,6 +57,8 @@ public class WRMFThread implements Callable<WRMF> {
         try {
             if (mf == null) {
                 mf = new WRMF();
+                mf.numFactors = Parameter.mfFactors;
+                mf.numIter = Parameter.mfIter;
                 userMapping = new EntityMapping();
                 itemMapping = new EntityMapping();
                 IPosOnlyFeedback training_data = ItemData.read(mfPath, userMapping, itemMapping, false);
