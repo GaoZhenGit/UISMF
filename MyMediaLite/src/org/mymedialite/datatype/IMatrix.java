@@ -17,11 +17,13 @@
 
 package org.mymedialite.datatype;
 
+import java.io.Serializable;
+
 /**
  * Generic interface for matrix data types
  * @version 2.03
  */
-public interface IMatrix<T> {
+public interface IMatrix<T> extends Serializable{
 
   /** 
    * Get the value at (i,j)
