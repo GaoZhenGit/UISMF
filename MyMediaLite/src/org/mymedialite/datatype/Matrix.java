@@ -145,7 +145,7 @@ public class Matrix<T> implements IMatrix<T>  {
   public List<T> getRow(int i) {
     List<T> row = new ArrayList<T>(this.dim2);
     for (int x = 0; x < this.dim2; x++)
-      row.set(x, get(i, x));
+      row.add(get(i, x));
     return row;
   }
 

@@ -7,18 +7,20 @@ import org.mymedialite.data.WeightedItem;
 import org.mymedialite.datatype.IBooleanMatrix;
 import org.mymedialite.datatype.IMatrix;
 import org.mymedialite.datatype.Matrix;
+import org.mymedialite.eval.measures.NDCG;
+import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.WRMF;
+import org.mymedialite.util.Utils;
 import org.social.util.FileCacheUtil;
 import org.social.util.Parameter;
 import org.social.util.UserCounter;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -110,7 +112,13 @@ public class ItemPredictorTotal {
             Matrix<Double> totalmatrix = (Matrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
 
             IntList testUsers = testDataWrapper.allUsers();
+            //获得测试集矩阵，用于获得当前用户的正确推荐items
             IBooleanMatrix itemGetter = testDataWrapper.userMatrix();
+
+            List<Map<Integer, Double>> precList = new ArrayList<>();
+            List<Map<Integer, Double>> recallList = new ArrayList<>();
+            List<Map<Integer, Double>> ndcgList = new ArrayList<>();
+            List<Map<Integer, Boolean>> conList = new ArrayList<>();
 
             for (Integer testUserId : testUsers) {
                 //取出矩阵的一行，然后根据score大到小排序，然后将下标排成List，形成推荐列表
@@ -120,22 +128,53 @@ public class ItemPredictorTotal {
                     Double score = scoreList.get(i);
                     WeightedItem item = new WeightedItem();
                     item.item_id = i;
-                    item.weight = score;
+                    item.weight = score == null ? 0 : score;
                     tmpList.add(item);
                 }
-                scoreList = null;
                 Collections.sort(tmpList, Collections.reverseOrder());
-                List<Integer> predictList = new ArrayList<>(tmpList.size());//该list为当前测试用户的推荐列表
+                //该list为当前测试用户的推荐列表
+                List<Integer> predictList = new ArrayList<>(tmpList.size());
                 for (WeightedItem item : tmpList) {
                     predictList.add(item.item_id);
                 }
                 tmpList = null;
 
+                Collection<Integer> correct_items = itemGetter.get(testUserId);
 
 
+                Map<Integer, Double> prec = PrecisionAndRecall.precisionAt(predictList, correct_items, new HashSet<Integer>(), predictNum);
+                precList.add(prec);
+                Map<Integer, Double> recall = PrecisionAndRecall.recallAt(predictList, correct_items, new HashSet<Integer>(), predictNum);
+                recallList.add(recall);
+                Map<Integer, Double> ndcg = ndcg(predictList, correct_items, predictNum);
+                ndcgList.add(ndcg);
+                Map<Integer, Boolean> con = conversionHit(predictList, correct_items, predictNum);
+                conList.add(con);
             }
-        } catch (Exception e) {
 
+            Map<Integer, Double> prec = totalRate(precList);
+            Map<Integer, Double> recall = totalRate(recallList);
+            Map<Integer, Double> ndcg = totalRate(ndcgList);
+            Map<Integer, Double> con = totalConversion(conList);
+
+            String pathString = Parameter.maxF1Path +  "all.IF." + Parameter.L + ".I" + Parameter.iL;
+            PrintWriter resultWriter = new PrintWriter(new File(pathString));
+            for (int n : predictNum) {
+                double precV = prec.get(n);
+                double recallV = recall.get(n);
+                double f1 = (2 * precV * recallV) / (precV + recallV);
+                resultWriter.write(n + ":");
+                resultWriter.write(" prec=" + prec.get(n));
+                resultWriter.write(" recall=" + recall.get(n));
+                resultWriter.write(" f1=" + f1);
+                resultWriter.write(" ndcg=" + ndcg.get(n));
+                resultWriter.write(" con=" + con.get(n));
+                resultWriter.write("\n");
+            }
+            resultWriter.flush();
+            resultWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -173,6 +212,62 @@ public class ItemPredictorTotal {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static Map<Integer, Double> ndcg(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+        Map<Integer, Double> result = new HashMap<>();
+        for (int n : nums) {
+            List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
+            double ndcg = NDCG.compute(topPredict, correctItem, new HashSet<>());
+            result.put(n, ndcg);
+        }
+        return result;
+    }
+
+    private static Map<Integer, Boolean> conversionHit(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+        Map<Integer, Boolean> result = new HashMap<>();
+        for (int n : nums) {
+            List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
+            int hitCount = Utils.intersect(topPredict, correctItem).size();
+            result.put(n, hitCount > 0);
+        }
+        return result;
+    }
+
+    private static Map<Integer, Double> totalRate(List<Map<Integer, Double>> list) {
+        int size = list.size();
+        Map<Integer, Double> result = new HashMap<>();
+        for (int i = 0; i < size; i++) {
+            Map<Integer, Double> item = list.get(i);
+            for (int n : predictNum) {
+                Double r = result.get(n);
+                if (r == null) {
+                    r = 0.0;
+                }
+                Double it = item.get(n);
+                result.put(n, r + it);
+            }
+        }
+        for (int n : predictNum) {
+            Double r = result.get(n);
+            result.put(n, r / size);
+        }
+        return result;
+    }
+
+    private static Map<Integer, Double> totalConversion(List<Map<Integer, Boolean>> list) {
+        int size = list.size();
+        Map<Integer, Double> result = new HashMap<>();
+        for (int n : predictNum) {
+            int hitCount = 0;
+            for (int i = 0; i < size; i++) {
+                if (list.get(i).get(n)) {
+                    hitCount++;
+                }
+            }
+            result.put(n, (double) hitCount / size);
+        }
+        return result;
     }
 
 

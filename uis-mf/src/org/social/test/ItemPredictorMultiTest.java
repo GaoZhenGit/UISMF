@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.mymedialite.IRecommender;
+import org.mymedialite.data.EntityMapping;
 import org.mymedialite.data.IPosOnlyFeedback;
 import org.mymedialite.data.WeightedItem;
 import org.mymedialite.datatype.Pair;
@@ -153,22 +154,33 @@ public class ItemPredictorMultiTest {
             TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
             TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
 
-//            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
+            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
 
             List<IPosOnlyFeedback> training_data_list = new ArrayList<IPosOnlyFeedback>();
             for (int i = 0; i < Parameter.L; i++) {
+
+                EntityMapping fmap = new EntityMapping();
+                BufferedReader fReader = new BufferedReader(new FileReader(trainingDataDir + Parameter.cfmap + i));
+                fmap.loadMapping(fReader);
+                fReader.close();
+
+                EntityMapping gmap = new EntityMapping();
+                BufferedReader gReader = new BufferedReader(new FileReader(trainingDataDir + Parameter.cgmap + i));
+                gmap.loadMapping(gReader);
+                gReader.close();
+
                 IPosOnlyFeedback training_data = ItemData.read(trainingDataDir
-                        + Parameter.cname + i, null, null, false);
+                        + Parameter.cname + i, fmap, gmap, false);
                 //数据集为空时,执行下一个
                 if (training_data.userMatrix().numberOfEntries() == 0) {
                     continue;
                 }
                 training_data_list.add(training_data);
-                WRMFser recommender = new WRMFser();
+                WRMF recommender = new WRMF();
                 recommender.loadModel(Parameter.IFMFPath + medium + "." + i);
-//                recommenderList.add(recommender);
+                recommenderList.add(recommender);
                 System.out.println("tranning" + i);
-                FileCacheUtil.saveDiskCache(recommender, Parameter.recommenderCachePath + i);
+//                FileCacheUtil.saveDiskCache(recommender, Parameter.recommenderCachePath + i);
                 recommender = null;
                 System.gc();
             }
@@ -185,7 +197,7 @@ public class ItemPredictorMultiTest {
 //    			Boolean repeated_events,
 //    			CommunityData communityData, 
 //    			String medium)
-            evaluate(null, traningData, testData, training_data_list,
+            evaluate(recommenderList, traningData, testData, training_data_list,
                     testData.allUsers(), testData.allItems(), null, null, communityData,
                     medium);
         }
@@ -327,14 +339,7 @@ public class ItemPredictorMultiTest {
         }
         List<Predictor> predictors = new ArrayList<>();
         List<Future<PredictorParameter>> ppResults = new ArrayList<>();
-        ExecutorService exec = Executors.newFixedThreadPool(sumThreadCount);
-        recommenderList = new ArrayList<>();
-        //读取缓存类
-        for (int i = 0; i < Parameter.L; i++) {
-            IRecommender recommender = (IRecommender) FileCacheUtil.loadDiskCache(Parameter.recommenderCachePath + i);
-            recommenderList.add(recommender);
-        }
-        System.out.println("read cache finish");
+        ExecutorService exec = Executors.newFixedThreadPool(sumThreadCount);;
 
         for (int i = 0; i < userAllocationList.size(); i++) {
             Predictor predictor = new Predictor(recommenderList,
