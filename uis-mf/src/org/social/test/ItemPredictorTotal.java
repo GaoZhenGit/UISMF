@@ -35,9 +35,25 @@ public class ItemPredictorTotal {
     private static String totalItemMappingPath = Parameter.matrixPath + ".g_map";
 
     public static void main(String[] args) {
-        multiply();
-        score();
-        predict();
+        if (args == null || args.length == 0) {
+            multiply();
+            score();
+            predict();
+        } else {
+            switch (args[0]) {
+                case "1":
+                    multiply();
+                    break;
+                case "2":
+                    score();
+                    break;
+                case "3":
+                    predict();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private static void multiply() {
@@ -53,7 +69,7 @@ public class ItemPredictorTotal {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                System.out.println(i + "result get");
+                System.out.println(i + " result get");
             }
 
         }
@@ -96,8 +112,9 @@ public class ItemPredictorTotal {
             saveMapping(totalUserMapping, totalUserMappingPath);
             saveMapping(totalItemMapping, totalItemMappingPath);
             FileCacheUtil.saveDiskCache(totalMatrix, Parameter.matrixPath + "Total");
+            System.out.println("matix " + i + " added");
         }
-
+        System.out.println("total matrix finish");
     }
 
     private static void predict() {
@@ -121,6 +138,9 @@ public class ItemPredictorTotal {
             List<Map<Integer, Boolean>> conList = new ArrayList<>();
 
             for (Integer testUserId : testUsers) {
+                if (testUserId >= totalmatrix.dim1) {
+                    continue;
+                }
                 //取出矩阵的一行，然后根据score大到小排序，然后将下标排成List，形成推荐列表
                 List<Double> scoreList = totalmatrix.getRow(testUserId);
                 List<WeightedItem> tmpList = new ArrayList<>(scoreList.size());
