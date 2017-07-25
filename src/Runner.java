@@ -5,6 +5,7 @@ import chosen.nlp.lda.test.FilterDocTest;
 import chosen.nlp.lda.test.UISTest;
 import com.alibaba.fastjson.JSON;
 import org.social.test.ItemPredictorMultiTest;
+import org.social.test.ItemPredictorTotal;
 import org.social.util.Parameter;
 
 import java.io.File;
@@ -23,6 +24,7 @@ public class Runner {
         LDAParameter.iterations = config.ldaIter;
         Parameter.mfFactors = config.mfFactors;
         Parameter.mfIter = config.mfIter;
+        FilterDocTest.filterBehind = config.dataFilter;
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
             PathConfig.twitterUserLinksFile = config.dataSetPath;
@@ -78,9 +80,10 @@ public class Runner {
 
         if (config.runModule.ItemPredictorMultiTest2) {
             long start = System.currentTimeMillis();
-            ItemPredictorMultiTest.main(new String[]{"2", "1",
-                    String.valueOf(config.topicCount),
-                    String.valueOf(config.interestTopicCount), "0"});
+//            ItemPredictorMultiTest.main(new String[]{"2", "1",
+//                    String.valueOf(config.topicCount),
+//                    String.valueOf(config.interestTopicCount), "0"});
+            ItemPredictorTotal.main(null);
             long end = System.currentTimeMillis();
             recordTime(start, end, "sum", timeRecorder);
         }

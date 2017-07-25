@@ -5,6 +5,7 @@ import com.alibaba.fastjson.annotation.JSONType;
  * Created by host on 2017/7/4.
  */
 public class Config {
+    public int dataFilter;
     public int topicCount;
     public int interestTopicCount;
     public RunModule runModule;

@@ -35,8 +35,8 @@ public class ItemPredictorTotal {
     private static String totalItemMappingPath = Parameter.matrixPath + ".g_map";
 
     public static void main(String[] args) {
-//        multiply();
-//        score();
+        multiply();
+        score();
         predict();
     }
 
