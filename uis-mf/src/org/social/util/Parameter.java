@@ -1,7 +1,7 @@
 package org.social.util;
 
 public class Parameter {
-  public static short L = 10;
+  public static int L = 10;
   public static int iL = 10;
   public static int LAssign = 20;
   public static int mfFactors = 10;

@@ -20,10 +20,11 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         Config config = getConfig(args[0]);
 
-        LDAParameter.K = config.topicCount;
+        LDAParameter.K = Parameter.L = config.topicCount;
         LDAParameter.iterations = config.ldaIter;
         Parameter.mfFactors = config.mfFactors;
         Parameter.mfIter = config.mfIter;
+        Parameter.iL = config.interestTopicCount;
         FilterDocTest.filterBehind = config.dataFilter;
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {

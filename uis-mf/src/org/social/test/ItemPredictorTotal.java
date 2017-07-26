@@ -125,8 +125,10 @@ public class ItemPredictorTotal {
         try {
             //读取测试集
             IPosOnlyFeedback testDataWrapper = ItemData.read(Parameter.testDataPath, totalUserMapping, totalItemMapping, false);
+            System.out.println("test set readed");
             //读取总矩阵
             Matrix<Double> totalmatrix = (Matrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
+            System.out.println("total matrix readed");
 
             IntList testUsers = testDataWrapper.allUsers();
             //获得测试集矩阵，用于获得当前用户的正确推荐items
@@ -137,7 +139,12 @@ public class ItemPredictorTotal {
             List<Map<Integer, Double>> ndcgList = new ArrayList<>();
             List<Map<Integer, Boolean>> conList = new ArrayList<>();
 
-            for (Integer testUserId : testUsers) {
+            int testUserSize = testUsers.size();
+            for (int ti = 0; ti < testUserSize; ti++) {
+                Integer testUserId = testUsers.get(ti);
+                if (ti % 100 == 0) {
+                    System.out.println((double) ti / testUserSize);
+                }
                 if (testUserId >= totalmatrix.dim1) {
                     continue;
                 }
@@ -177,7 +184,8 @@ public class ItemPredictorTotal {
             Map<Integer, Double> ndcg = totalRate(ndcgList);
             Map<Integer, Double> con = totalConversion(conList);
 
-            String pathString = Parameter.maxF1Path +  "all.IF." + Parameter.L + ".I" + Parameter.iL;
+            String pathString = Parameter.maxF1Path + "all.IF." + Parameter.L + ".I" + Parameter.iL;
+            System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
             for (int n : predictNum) {
                 double precV = prec.get(n);
