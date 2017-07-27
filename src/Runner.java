@@ -108,5 +108,6 @@ public class Runner {
         long spendTime = end - start;
         String line = op + ":" + spendTime + "\n";
         writer.write(line);
+        writer.flush();
     }
 }

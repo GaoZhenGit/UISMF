@@ -109,11 +109,11 @@ public class ItemPredictorTotal {
                     max(totalMatrix, totalUserIndex, totalItemIndex, communityValue);
                 }
             }
-            saveMapping(totalUserMapping, totalUserMappingPath);
-            saveMapping(totalItemMapping, totalItemMappingPath);
-            FileCacheUtil.saveDiskCache(totalMatrix, Parameter.matrixPath + "Total");
             System.out.println("matix " + i + " added");
         }
+        FileCacheUtil.saveDiskCache(totalMatrix, Parameter.matrixPath + "Total");
+        saveMapping(totalUserMapping, totalUserMappingPath);
+        saveMapping(totalItemMapping, totalItemMappingPath);
         System.out.println("total matrix finish");
     }
 
@@ -324,6 +324,18 @@ public class ItemPredictorTotal {
             }
             FileCacheUtil.saveDiskCache(mutil, savePath);
             return mutil;
+        }
+    }
+
+    private static class MatrixAdder implements Callable<String> {
+
+        public MatrixAdder(int index, EntityMapping totalUserMapping, EntityMapping totalItemMapping) {
+
+        }
+
+        @Override
+        public String call() throws Exception {
+            return null;
         }
     }
 }

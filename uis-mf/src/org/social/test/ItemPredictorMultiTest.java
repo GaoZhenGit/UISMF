@@ -102,43 +102,11 @@ public class ItemPredictorMultiTest {
                 try {
                     mf.get();
                     System.out.println("tranning done" + counter++);
-                    // MFList.add(recommender);
-                    // save models to files for further usage.
                 } catch (Exception e) {
                     System.err.println(e);
                 } finally {
                 }
             }
-//            int sysTheadSize = 8;
-//            for (int j = 0; j < Parameter.L / sysTheadSize + 1; j++) {
-//                for (int i = 0; i < sysTheadSize; i++) {
-//                    int t_no = j * 8 + i;
-//                    if (t_no >= Parameter.L) break;
-//                    WRMF recommender = new WRMF();
-//                    IPosOnlyFeedback training_data = ItemData.read(trainingDataDir + Parameter.cname + t_no,
-//                            null, null, false);
-//                    training_data_list.add(training_data);
-//                    recommender.setFeedback(training_data);
-//                    WRMFThread mfThread = new WRMFThread(recommender,
-//                            Parameter.IFMFPath + medium + "." + t_no,
-//                            medium, testData, t_no);
-//                    mfResults.add(exec.submit(mfThread));
-//                }
-//                for (int i = 0; i < sysTheadSize; i++) {
-//                    int t_no = j * 8 + i;
-//                    if (t_no >= Parameter.L) break;
-//                    Future<WRMF> mf = mfResults.get(t_no);
-//                    try {
-//                        mf.get();
-//                        System.out.println("tranning done" + counter++);
-//                        // MFList.add(recommender);
-//                        // save models to files for further usage.
-//                    } catch (Exception e) {
-//                        System.err.println(e);
-//                    } finally {
-//                    }
-//                }
-//            }
             exec.shutdown();
 
             System.gc();
@@ -184,19 +152,7 @@ public class ItemPredictorMultiTest {
                 recommender = null;
                 System.gc();
             }
-            Parameter.L = (short) (training_data_list.size());  //Community的数量
 
-//    public static ItemRecommendationEvaluationResults evaluate(
-//   			List<IRecommender> recommenderList, 
-//    			IPosOnlyFeedback orgTraining,
-//    			IPosOnlyFeedback test, 
-//    			List<IPosOnlyFeedback> training,
-//    			Collection<Integer> test_users, 
-//    			Collection<Integer> candidate_items,
-//    			CandidateItems candidate_item_mode, 
-//    			Boolean repeated_events,
-//    			CommunityData communityData, 
-//    			String medium)
             evaluate(recommenderList, traningData, testData, training_data_list,
                     testData.allUsers(), testData.allItems(), null, null, communityData,
                     medium);
