@@ -67,10 +67,12 @@ public class Runner {
         }
 
         if (config.dynamicThread) {
+            ItemPredictorTotal.mfThreadCount = (int) Math.sqrt(config.topicCount);
             ItemPredictorMultiTest.mfThreadCount = (int) Math.sqrt(config.topicCount);
             ItemPredictorMultiTest.sumThreadCount = (int) Math.sqrt(config.topicCount);
         } else {
             ItemPredictorMultiTest.mfThreadCount = config.mfThreadCount;
+            ItemPredictorTotal.mfThreadCount = config.mfThreadCount;
             ItemPredictorMultiTest.sumThreadCount = config.sumThreadCount;
         }
 

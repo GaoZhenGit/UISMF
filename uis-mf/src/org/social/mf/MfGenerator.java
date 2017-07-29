@@ -11,7 +11,7 @@ public class MfGenerator {
     public static String className = "org.mymedialite.itemrec.WRMF";
 
     public static String methodName() {
-        String[] a = className.split(".");
+        String[] a = className.split("\\.");
         return a[a.length - 1];
     }
 

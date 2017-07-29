@@ -11,7 +11,7 @@ import org.mymedialite.eval.measures.NDCG;
 import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.eval.measures.ReciprocalRank;
 import org.mymedialite.io.ItemData;
-import org.mymedialite.itemrec.WRMF;
+import org.mymedialite.itemrec.MF;
 import org.mymedialite.util.Utils;
 import org.social.mf.MfGenerator;
 import org.social.util.FileCacheUtil;
@@ -30,6 +30,8 @@ import java.util.concurrent.*;
  * 将矩阵合并的步奏，修改以前的计算方式不对
  */
 public class ItemPredictorTotal {
+
+    public static int mfThreadCount = 1;
 
     public static int[] predictNum = new int[]{5, 10, 15, 20, 25, 30, 35, 40, 50};
 
@@ -60,7 +62,7 @@ public class ItemPredictorTotal {
     }
 
     private static void multiply() {
-        ExecutorService exec = Executors.newFixedThreadPool(1);
+        ExecutorService exec = Executors.newFixedThreadPool(mfThreadCount);
         List<Future<IMatrix<Double>>> taskList = new ArrayList<>();
         for (int i = 0; i < Parameter.L; i++) {
             MatrixMultiplier matrixMultiplier = new MatrixMultiplier(Parameter.IFMFPath + "all." + i, Parameter.matrixPath + i);
@@ -191,7 +193,7 @@ public class ItemPredictorTotal {
             Map<Integer, Double> con = totalConversion(conList);
             Map<Integer, Double> mrr = totalRate(mrrList);
 
-            String pathString = "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
+            String pathString =  Parameter.maxF1Path + "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
             System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
             DecimalFormat df = new DecimalFormat("0.000000000000000000");
@@ -331,15 +333,15 @@ public class ItemPredictorTotal {
         @Override
         public IMatrix<Double> call() throws Exception {
 
-            WRMF wrmf = new WRMF();
-            wrmf.loadModel(modelPath);
-            int userNum = wrmf.maxUserID() + 1;
-            int itemNum = wrmf.maxItemID() + 1;
+            MF mf = MfGenerator.generate().newInstance();
+            mf.loadModel(modelPath);
+            int userNum = mf.maxUserID() + 1;
+            int itemNum = mf.maxItemID() + 1;
 
             Matrix<Double> mutil = new Matrix<>(userNum, itemNum);
             for (int i = 0; i < userNum; i++) {
                 for (int j = 0; j < itemNum; j++) {
-                    mutil.set(i, j, wrmf.predict(i, j));
+                    mutil.set(i, j, mf.predict(i, j));
                 }
             }
             FileCacheUtil.saveDiskCache(mutil, savePath);

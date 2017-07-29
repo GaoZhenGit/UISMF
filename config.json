@@ -7,7 +7,7 @@
   "ldaIter": 101,
   "mfFactors": 16,
   "mfIter": 10,
-  "mfMethod":"org.mymedialite.itemrec.WRMF",
+  "mfMethod":"org.mymedialite.itemrec.BPRMF",
   "runModule": {
     "FilterDocTest1": true,
     "FilterDocTest2": true,
@@ -20,6 +20,6 @@
     "predict": true
   },
   "dynamicThread": false,
-  "mfThreadCount": 2,
+  "mfThreadCount": 5,
   "sumThreadCount": 1
 }
