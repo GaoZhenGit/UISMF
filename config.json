@@ -1,12 +1,12 @@
 {
-  "dataSetPath":"data/LdaTrainSet/wb_small.txt",
-  "dataFilter":5,
-  "topicCount":10,
-  "interestTopicCount":2,
-  "ldaThreadHold":0.2,
-  "ldaIter":101,
-  "mfFactors":15,
-  "mfIter":10,
+  "dataSetPath": "data/LdaTrainSet/trust_data.txt",
+  "dataFilter": 5,
+  "topicCount": 50,
+  "interestTopicCount": 25,
+  "ldaThreadHold": 0.02,
+  "ldaIter": 101,
+  "mfFactors": 16,
+  "mfIter": 10,
   "runModule": {
     "FilterDocTest1": true,
     "FilterDocTest2": true,
@@ -14,9 +14,11 @@
     "UISTest1": true,
     "UISTest2": true,
     "ItemPredictorMultiTest1": true,
-    "ItemPredictorMultiTest2": false
+    "multiply": true,
+    "score": true,
+    "predict": true
   },
-  "dynamicThread":false,
-  "mfThreadCount":2,
-  "sumThreadCount":1
+  "dynamicThread": false,
+  "mfThreadCount": 2,
+  "sumThreadCount": 1
 }

@@ -9,6 +9,7 @@ import org.mymedialite.datatype.IMatrix;
 import org.mymedialite.datatype.Matrix;
 import org.mymedialite.eval.measures.NDCG;
 import org.mymedialite.eval.measures.PrecisionAndRecall;
+import org.mymedialite.eval.measures.ReciprocalRank;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.WRMF;
 import org.mymedialite.util.Utils;
@@ -20,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -138,6 +140,7 @@ public class ItemPredictorTotal {
             List<Map<Integer, Double>> recallList = new ArrayList<>();
             List<Map<Integer, Double>> ndcgList = new ArrayList<>();
             List<Map<Integer, Boolean>> conList = new ArrayList<>();
+            List<Map<Integer, Double>> mrrList = new ArrayList<>();
 
             int testUserSize = testUsers.size();
             for (int ti = 0; ti < testUserSize; ti++) {
@@ -177,26 +180,32 @@ public class ItemPredictorTotal {
                 ndcgList.add(ndcg);
                 Map<Integer, Boolean> con = conversionHit(predictList, correct_items, predictNum);
                 conList.add(con);
+                Map<Integer, Double> mrr = mrr(predictList, correct_items, predictNum);
+                mrrList.add(mrr);
             }
 
             Map<Integer, Double> prec = totalRate(precList);
             Map<Integer, Double> recall = totalRate(recallList);
             Map<Integer, Double> ndcg = totalRate(ndcgList);
             Map<Integer, Double> con = totalConversion(conList);
+            Map<Integer, Double> mrr = totalRate(mrrList);
 
             String pathString = Parameter.maxF1Path + "all.IF." + Parameter.L + ".I" + Parameter.iL;
             System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
+            DecimalFormat df = new DecimalFormat("0.000000000000000000");
+            DecimalFormat df1 = new DecimalFormat("00");
             for (int n : predictNum) {
                 double precV = prec.get(n);
                 double recallV = recall.get(n);
                 double f1 = (2 * precV * recallV) / (precV + recallV);
-                resultWriter.write(n + ":");
-                resultWriter.write(" prec=" + prec.get(n));
-                resultWriter.write(" recall=" + recall.get(n));
-                resultWriter.write(" f1=" + f1);
-                resultWriter.write(" ndcg=" + ndcg.get(n));
-                resultWriter.write(" con=" + con.get(n));
+                resultWriter.write(df1.format(n) + ":");
+                resultWriter.write(" prec=" + df.format(prec.get(n)));
+                resultWriter.write(" recall=" + df.format(recall.get(n)));
+                resultWriter.write(" f1=" + df.format(f1));
+                resultWriter.write(" ndcg=" + df.format(ndcg.get(n)));
+                resultWriter.write(" con=" + df.format(con.get(n)));
+                resultWriter.write(" mrr=" + df.format(mrr.get(n)));
                 resultWriter.write("\n");
             }
             resultWriter.flush();
@@ -247,6 +256,16 @@ public class ItemPredictorTotal {
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
             double ndcg = NDCG.compute(topPredict, correctItem, new HashSet<>());
+            result.put(n, ndcg);
+        }
+        return result;
+    }
+
+    private static Map<Integer, Double> mrr(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+        Map<Integer, Double> result = new HashMap<>();
+        for (int n : nums) {
+            List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
+            double ndcg = ReciprocalRank.compute(topPredict, correctItem, new HashSet<>());
             result.put(n, ndcg);
         }
         return result;

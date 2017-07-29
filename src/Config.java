@@ -27,6 +27,8 @@ public class Config {
         public boolean UISTest1;
         public boolean UISTest2;
         public boolean ItemPredictorMultiTest1;
-        public boolean ItemPredictorMultiTest2;
+        public boolean multiply;
+        public boolean score;
+        public boolean predict;
     }
 }

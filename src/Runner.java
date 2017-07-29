@@ -32,7 +32,9 @@ public class Runner {
             System.out.println("load dataset:" + config.dataSetPath);
         }
 
-        File file = new File("data/time/" + System.currentTimeMillis() + ".txt");
+
+        String pathString = "all.IF." + Parameter.L + ".I" + Parameter.iL;
+        File file = new File("data/time/" + pathString + ".txt");
         if (!file.exists()) {
             file.getParentFile().mkdir();
         }
@@ -79,15 +81,27 @@ public class Runner {
             recordTime(start, end, "mf", timeRecorder);
         }
 
-        if (config.runModule.ItemPredictorMultiTest2) {
+        if (config.runModule.multiply) {
             long start = System.currentTimeMillis();
-//            ItemPredictorMultiTest.main(new String[]{"2", "1",
-//                    String.valueOf(config.topicCount),
-//                    String.valueOf(config.interestTopicCount), "0"});
-            ItemPredictorTotal.main(null);
+            ItemPredictorTotal.main(new String[]{"1"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "sum", timeRecorder);
+            recordTime(start, end, "multiply", timeRecorder);
         }
+
+        if (config.runModule.score) {
+            long start = System.currentTimeMillis();
+            ItemPredictorTotal.main(new String[]{"2"});
+            long end = System.currentTimeMillis();
+            recordTime(start, end, "score", timeRecorder);
+        }
+
+        if (config.runModule.predict) {
+            long start = System.currentTimeMillis();
+            ItemPredictorTotal.main(new String[]{"3"});
+            long end = System.currentTimeMillis();
+            recordTime(start, end, "predict", timeRecorder);
+        }
+
         timeRecorder.flush();
         timeRecorder.close();
     }
