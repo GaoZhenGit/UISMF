@@ -23,8 +23,9 @@ import org.mymedialite.eval.CandidateItems;
 import org.mymedialite.eval.ItemRecommendationEvaluationResults;
 import org.mymedialite.eval.Items;
 import org.mymedialite.io.ItemData;
+import org.mymedialite.itemrec.MF;
 import org.mymedialite.itemrec.WRMF;
-import org.social.ser.WRMFser;
+import org.social.mf.MFThread;
 import org.social.util.*;
 import org.social.util.QuickTopN.PairComparable;
 
@@ -81,14 +82,14 @@ public class ItemPredictorMultiTest {
         if (args[1].equals("2")) {
 
             ExecutorService exec = Executors.newFixedThreadPool(mfThreadCount);
-            List<Future<WRMF>> mfResults = new ArrayList<>();
+            List<Future<MF>> mfResults = new ArrayList<>();
             for (int t_no = 0; t_no < Parameter.L; t_no++) {
                 String trainingDataName = trainingDataDir + Parameter.cname + t_no;
                 String savePath = Parameter.IFMFPath + medium + "." + t_no;
                 String userMapPath = trainingDataDir + Parameter.cfmap + t_no;
                 String itemMapPath = trainingDataDir + Parameter.cgmap + t_no;
 
-                WRMFThread mfThread = new WRMFThread(
+                MFThread mfThread = new MFThread(
                         trainingDataName,
                         savePath,
                         userMapPath,
@@ -98,7 +99,7 @@ public class ItemPredictorMultiTest {
             }
 
             for (int i = 0; i < Parameter.L; i++) {
-                Future<WRMF> mf = mfResults.get(i);
+                Future<MF> mf = mfResults.get(i);
                 try {
                     mf.get();
                     System.out.println("tranning done" + counter++);
@@ -114,48 +115,6 @@ public class ItemPredictorMultiTest {
             idUtil.IDToIndexMap = TwitterIDUtil.IDToIndexMap;
             idUtil.indexToIDMap = TwitterIDUtil.indexToIDMap;
             idUtil.write();
-        } else {
-            IPosOnlyFeedback traningData = ItemData.read(orgTestDataPath, null, null, false);
-
-            IDUtil idUtil = new IDUtil();
-            idUtil = idUtil.read();
-            TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
-            TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
-
-            List<IRecommender> recommenderList = new ArrayList<IRecommender>();
-
-            List<IPosOnlyFeedback> training_data_list = new ArrayList<IPosOnlyFeedback>();
-            for (int i = 0; i < Parameter.L; i++) {
-
-                EntityMapping fmap = new EntityMapping();
-                BufferedReader fReader = new BufferedReader(new FileReader(trainingDataDir + Parameter.cfmap + i));
-                fmap.loadMapping(fReader);
-                fReader.close();
-
-                EntityMapping gmap = new EntityMapping();
-                BufferedReader gReader = new BufferedReader(new FileReader(trainingDataDir + Parameter.cgmap + i));
-                gmap.loadMapping(gReader);
-                gReader.close();
-
-                IPosOnlyFeedback training_data = ItemData.read(trainingDataDir
-                        + Parameter.cname + i, fmap, gmap, false);
-                //数据集为空时,执行下一个
-                if (training_data.userMatrix().numberOfEntries() == 0) {
-                    continue;
-                }
-                training_data_list.add(training_data);
-                WRMF recommender = new WRMF();
-                recommender.loadModel(Parameter.IFMFPath + medium + "." + i);
-                recommenderList.add(recommender);
-                System.out.println("tranning" + i);
-//                FileCacheUtil.saveDiskCache(recommender, Parameter.recommenderCachePath + i);
-                recommender = null;
-                System.gc();
-            }
-
-            evaluate(recommenderList, traningData, testData, training_data_list,
-                    testData.allUsers(), testData.allItems(), null, null, communityData,
-                    medium);
         }
     }
 

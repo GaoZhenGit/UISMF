@@ -1,4 +1,4 @@
-package org.social.util;
+package org.social.mf;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -13,6 +13,7 @@ import org.mymedialite.data.IPosOnlyFeedback;
 import org.mymedialite.eval.Items;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.WRMF;
+import org.social.util.Parameter;
 
 public class WRMFThread implements Callable<WRMF> {
 

@@ -4,6 +4,7 @@ import chosen.nlp.lda.test.ExtractTest;
 import chosen.nlp.lda.test.FilterDocTest;
 import chosen.nlp.lda.test.UISTest;
 import com.alibaba.fastjson.JSON;
+import org.social.mf.MfGenerator;
 import org.social.test.ItemPredictorMultiTest;
 import org.social.test.ItemPredictorTotal;
 import org.social.util.Parameter;
@@ -26,6 +27,7 @@ public class Runner {
         Parameter.mfIter = config.mfIter;
         Parameter.iL = config.interestTopicCount;
         FilterDocTest.filterBehind = config.dataFilter;
+        MfGenerator.className = config.mfMethod;
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
             PathConfig.twitterUserLinksFile = config.dataSetPath;
@@ -33,7 +35,7 @@ public class Runner {
         }
 
 
-        String pathString = "all.IF." + Parameter.L + ".I" + Parameter.iL;
+        String pathString = "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
         File file = new File("data/time/" + pathString + ".txt");
         if (!file.exists()) {
             file.getParentFile().mkdir();

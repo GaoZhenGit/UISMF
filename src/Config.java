@@ -17,6 +17,7 @@ public class Config {
     public int mfThreadCount;
     public int sumThreadCount;
     public String dataSetPath;
+    public String mfMethod;
 
 
     @JSONType

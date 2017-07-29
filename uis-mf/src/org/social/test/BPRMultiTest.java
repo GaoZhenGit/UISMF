@@ -1,7 +1,5 @@
 package org.social.test;
 
-import it.unimi.dsi.fastutil.ints.IntCollection;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -27,15 +25,12 @@ import org.mymedialite.datatype.SparseMatrix;
 import org.mymedialite.eval.CandidateItems;
 import org.mymedialite.eval.ItemRecommendationEvaluationResults;
 import org.mymedialite.eval.Items;
-import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.BPRMF;
-import org.mymedialite.itemrec.WRMF;
-import org.social.util.BPRMFThread;
+import org.social.mf.BPRMFThread;
 import org.social.util.Parameter;
 import org.social.util.Predictor;
 import org.social.util.PredictorParameter;
-import org.social.util.WRMFThread;
 import org.social.util.QuickTopN.PairComparable;
 
 import chosen.social.lda.util.CommunityData;

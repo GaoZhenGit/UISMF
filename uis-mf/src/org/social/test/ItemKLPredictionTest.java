@@ -3,7 +3,6 @@ package org.social.test;
 import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,14 +27,11 @@ import org.mymedialite.eval.measures.NDCG;
 import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.eval.measures.ReciprocalRank;
 import org.mymedialite.io.ItemData;
-import org.mymedialite.itemrec.WRMF;
 import org.mymedialite.util.Utils;
 import org.social.util.KLPredictor;
 import org.social.util.KLRecommender;
 import org.social.util.Parameter;
-import org.social.util.Predictor;
 import org.social.util.PredictorParameter;
-import org.social.util.WRMFThread;
 
 import chosen.social.lda.util.CommunityData;
 import chosen.social.lda.util.IDUtil;

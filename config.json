@@ -2,11 +2,12 @@
   "dataSetPath": "data/LdaTrainSet/trust_data.txt",
   "dataFilter": 5,
   "topicCount": 50,
-  "interestTopicCount": 25,
+  "interestTopicCount": 20,
   "ldaThreadHold": 0.02,
   "ldaIter": 101,
   "mfFactors": 16,
   "mfIter": 10,
+  "mfMethod":"org.mymedialite.itemrec.WRMF",
   "runModule": {
     "FilterDocTest1": true,
     "FilterDocTest2": true,

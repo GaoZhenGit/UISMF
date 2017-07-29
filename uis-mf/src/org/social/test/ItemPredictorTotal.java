@@ -13,6 +13,7 @@ import org.mymedialite.eval.measures.ReciprocalRank;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.WRMF;
 import org.mymedialite.util.Utils;
+import org.social.mf.MfGenerator;
 import org.social.util.FileCacheUtil;
 import org.social.util.Parameter;
 import org.social.util.UserCounter;
@@ -190,7 +191,7 @@ public class ItemPredictorTotal {
             Map<Integer, Double> con = totalConversion(conList);
             Map<Integer, Double> mrr = totalRate(mrrList);
 
-            String pathString = Parameter.maxF1Path + "all.IF." + Parameter.L + ".I" + Parameter.iL;
+            String pathString = "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
             System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
             DecimalFormat df = new DecimalFormat("0.000000000000000000");

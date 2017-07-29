@@ -1,4 +1,4 @@
-package org.social.util;
+package org.social.mf;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import org.mymedialite.data.IPosOnlyFeedback;
 import org.mymedialite.eval.Items;
 import org.mymedialite.itemrec.BPRMF;
+import org.social.util.Parameter;
 
 public class BPRMFThread implements Callable<BPRMF>{
   
