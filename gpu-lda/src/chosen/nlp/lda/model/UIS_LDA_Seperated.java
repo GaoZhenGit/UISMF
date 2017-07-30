@@ -210,7 +210,7 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
 
   public void inferenceModel() throws IOException {
     String pathString = LDAParameter.timeRecordPath + LDAParameter.K + "." + I;
-    File file = new File("data/time/" + pathString + ".txt");
+    File file = new File(pathString + ".txt");
     if (!file.exists()) {
       file.getParentFile().mkdir();
     }

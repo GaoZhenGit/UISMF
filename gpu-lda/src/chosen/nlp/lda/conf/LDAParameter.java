@@ -11,7 +11,7 @@ public class LDAParameter {
   
   public static double seedParameter = 0.6;
 
-  public static String timeRecordPath = "/data/time/ldaIterTime.";
+  public static String timeRecordPath = "data/time/ldaIterTime.";
   
   public LDAParameter() {
     // TODO Auto-generated constructor stub
