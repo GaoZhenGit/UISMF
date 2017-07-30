@@ -1,14 +1,6 @@
 package chosen.nlp.lda.model;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -217,11 +209,13 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
   }
 
   public void inferenceModel() throws IOException {
-    // TODO Auto-generated method stub
-//    if(iterations < saveStep + beginSaveIters){
-//      System.err.println("Error: the number of iterations should be larger than " + (saveStep + beginSaveIters));
-//      System.exit(0);
-//    }
+    String pathString = LDAParameter.timeRecordPath + LDAParameter.K + "." + I;
+    File file = new File("data/time/" + pathString + ".txt");
+    if (!file.exists()) {
+      file.getParentFile().mkdir();
+    }
+    PrintWriter timeWriter = new PrintWriter(file);
+
     for(int i = 0; i < iterations; i++){
       System.out.println("Iteration " + i);
       if((i >= beginSaveIters) && (((i - beginSaveIters) % saveStep) == 0)){
@@ -236,7 +230,8 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
         //
         outputCommunitySize(i, community);
       }
-      
+
+      long startTime = System.currentTimeMillis();
       //Use Gibbs Sampling to update z[][]
       for(int m = 0; m < M; m++){
         int N = trainSet.docs.get(m).docWords.length;
@@ -246,9 +241,13 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
           z[m][n] = newTopic;
         }
       }
+      long endTime = System.currentTimeMillis();
+      timeWriter.write("Iteration " + i + ": " + (endTime - startTime) + "\n");
     }
     
     UIS_LDA_Seperated.write(this, serialPath);
+    timeWriter.flush();
+    timeWriter.close();
   }
   
   private void updateEstimatedParameters() {

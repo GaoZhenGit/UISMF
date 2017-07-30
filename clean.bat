@@ -5,6 +5,7 @@ del/q data\LdaTrainSet\wb\all.CommunityData
 del/q data\LdaTrainSet\wb\twMAP
 del/q data\LdaResult\all\*
 del/q data\LdaResult\wb\IFMF\*
+del/q data\LdaResult\matrix\*
 del/q data\GPUResult\all\*
 del/q data\keepdata.txt
 del/q data\mutualLink.txt

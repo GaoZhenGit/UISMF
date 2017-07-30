@@ -10,6 +10,8 @@ public class LDAParameter {
   public static int beginSaveIters = 100;//Begin save model at this iteration
   
   public static double seedParameter = 0.6;
+
+  public static String timeRecordPath = "/data/time/ldaIterTime.";
   
   public LDAParameter() {
     // TODO Auto-generated constructor stub

@@ -258,7 +258,7 @@ public class ItemPredictorTotal {
         Map<Integer, Double> result = new HashMap<>();
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
-            double ndcg = NDCG.compute(topPredict, correctItem, new HashSet<>());
+            double ndcg = NDCG.compute(topPredict, correctItem, new HashSet<Integer>());
             result.put(n, ndcg);
         }
         return result;
@@ -268,7 +268,7 @@ public class ItemPredictorTotal {
         Map<Integer, Double> result = new HashMap<>();
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
-            double ndcg = ReciprocalRank.compute(topPredict, correctItem, new HashSet<>());
+            double ndcg = ReciprocalRank.compute(topPredict, correctItem, new HashSet<Integer>());
             result.put(n, ndcg);
         }
         return result;

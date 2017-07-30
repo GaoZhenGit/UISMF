@@ -19,6 +19,9 @@ mkdir data/LdaResult/wb/IFMF
 rm -r data/GPUResult/all
 mkdir data/GPUResult/all
 
+rm -r data/LdaResult/matrix
+mkdri data/LdaResult/matrix
+
 rm data/keepdata.txt
 rm data/mutualLink.txt
 rm data/testdata.txt

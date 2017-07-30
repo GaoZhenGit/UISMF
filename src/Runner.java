@@ -18,6 +18,9 @@ import java.util.Scanner;
  * Created by host on 2017/7/2.
  */
 public class Runner {
+
+    private static PrintWriter mTimeWriter;
+
     public static void main(String[] args) throws Exception {
         Config config = getConfig(args[0]);
 
@@ -34,13 +37,6 @@ public class Runner {
             System.out.println("load dataset:" + config.dataSetPath);
         }
 
-
-        String pathString = "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
-        File file = new File("data/time/" + pathString + ".txt");
-        if (!file.exists()) {
-            file.getParentFile().mkdir();
-        }
-        PrintWriter timeRecorder = new PrintWriter(file);
         if (config.runModule.FilterDocTest1) {
             FilterDocTest.main(new String[]{"1", "0.01"});
         }
@@ -59,7 +55,7 @@ public class Runner {
                     String.valueOf(config.interestTopicCount),
                     String.valueOf(config.ldaThreadHold), "0.01"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "lda", timeRecorder);
+            recordTime(start, end, "lda");
         }
 
         if (config.runModule.UISTest2) {
@@ -82,32 +78,32 @@ public class Runner {
                     String.valueOf(config.topicCount),
                     String.valueOf(config.interestTopicCount), "0"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "mf", timeRecorder);
+            recordTime(start, end, "mf");
         }
 
         if (config.runModule.multiply) {
             long start = System.currentTimeMillis();
             ItemPredictorTotal.main(new String[]{"1"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "multiply", timeRecorder);
+            recordTime(start, end, "multiply");
         }
 
         if (config.runModule.score) {
             long start = System.currentTimeMillis();
             ItemPredictorTotal.main(new String[]{"2"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "score", timeRecorder);
+            recordTime(start, end, "score");
         }
 
         if (config.runModule.predict) {
             long start = System.currentTimeMillis();
             ItemPredictorTotal.main(new String[]{"3"});
             long end = System.currentTimeMillis();
-            recordTime(start, end, "predict", timeRecorder);
+            recordTime(start, end, "predict");
         }
 
-        timeRecorder.flush();
-        timeRecorder.close();
+        mTimeWriter.flush();
+        mTimeWriter.close();
     }
 
     private static Config getConfig(String path) throws FileNotFoundException {
@@ -122,10 +118,22 @@ public class Runner {
         return config;
     }
 
-    private static void recordTime(long start, long end, String op, PrintWriter writer) {
-        long spendTime = end - start;
-        String line = op + ":" + spendTime + "\n";
-        writer.write(line);
-        writer.flush();
+    private static void recordTime(long start, long end, String op) {
+        try {
+            if (mTimeWriter == null) {
+                String pathString = "all." + MfGenerator.methodName() + "." + Parameter.L + ".I" + Parameter.iL;
+                File file = new File("data/time/" + pathString + ".txt");
+                if (!file.exists()) {
+                    file.getParentFile().mkdir();
+                }
+                mTimeWriter = new PrintWriter(file);
+            }
+            long spendTime = end - start;
+            String line = op + ":" + spendTime + "\n";
+            mTimeWriter.write(line);
+            mTimeWriter.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
