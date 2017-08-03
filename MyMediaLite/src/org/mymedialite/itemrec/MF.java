@@ -79,7 +79,7 @@ public abstract class MF extends IncrementalItemRecommender implements IIterativ
     MatrixExtensions.initNormal(itemFactors, initMean, initStDev);
   }
 
-  private PrintWriter mTimeRecorder;
+  protected PrintWriter mTimeRecorder;
   public void setTimeRecorder(PrintWriter printWriter) {
     this.mTimeRecorder = printWriter;
   }

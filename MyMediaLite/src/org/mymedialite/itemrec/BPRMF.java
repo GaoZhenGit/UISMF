@@ -167,8 +167,16 @@ public class BPRMF extends MF {
       lastLoss = computeLoss();
     }
 
-    for (int i = 0; i < numIter; i++)
+    for (int i = 0; i < numIter; i++) {
+      long start = System.currentTimeMillis();
       iterate();
+      long end = System.currentTimeMillis();
+      if (mTimeRecorder != null) {
+        mTimeRecorder.print("iter " + i + " :" + (end - start) + "\n");
+      }
+    }
+    mTimeRecorder.flush();
+    mTimeRecorder.close();
   }
 
   /**
