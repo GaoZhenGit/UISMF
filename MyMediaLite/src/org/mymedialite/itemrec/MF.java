@@ -78,13 +78,25 @@ public abstract class MF extends IncrementalItemRecommender implements IIterativ
     MatrixExtensions.initNormal(userFactors, initMean, initStDev);
     MatrixExtensions.initNormal(itemFactors, initMean, initStDev);
   }
+
+  private PrintWriter mTimeRecorder;
+  public void setTimeRecorder(PrintWriter printWriter) {
+    this.mTimeRecorder = printWriter;
+  }
   
   /** { @inheritDoc } */
   public void train() {
     initModel();
     for (int i=0; i<numIter; i++) {
+      long start = System.currentTimeMillis();
       iterate();
+      long end = System.currentTimeMillis();
+      if (mTimeRecorder != null) {
+        mTimeRecorder.print("iter " + i + " :" + (end - start) + "\n");
+      }
     }
+    mTimeRecorder.flush();
+    mTimeRecorder.close();
   }
 
   /** Iterate once over the data */

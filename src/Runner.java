@@ -49,6 +49,11 @@ public class Runner {
             ExtractTest.main(new String[]{"1"});
         }
 
+        if (config.runModule.dirMf) {
+            OnlyMfRunner.main(null);
+            return;
+        }
+
         if (config.runModule.UISTest1) {
             long start = System.currentTimeMillis();
             UISTest.main(new String[]{"2",

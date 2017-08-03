@@ -25,6 +25,7 @@ public class Config {
         public boolean FilterDocTest1;
         public boolean FilterDocTest2;
         public boolean ExtractTest;
+        public boolean dirMf;
         public boolean UISTest1;
         public boolean UISTest2;
         public boolean ItemPredictorMultiTest1;

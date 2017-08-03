@@ -254,7 +254,7 @@ public class ItemPredictorTotal {
         }
     }
 
-    private static Map<Integer, Double> ndcg(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+    public static Map<Integer, Double> ndcg(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
         Map<Integer, Double> result = new HashMap<>();
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
@@ -264,7 +264,7 @@ public class ItemPredictorTotal {
         return result;
     }
 
-    private static Map<Integer, Double> mrr(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+    public static Map<Integer, Double> mrr(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
         Map<Integer, Double> result = new HashMap<>();
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
@@ -274,7 +274,7 @@ public class ItemPredictorTotal {
         return result;
     }
 
-    private static Map<Integer, Boolean> conversionHit(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
+    public static Map<Integer, Boolean> conversionHit(Collection<Integer> predictList, Collection<Integer> correctItem, int[] nums) {
         Map<Integer, Boolean> result = new HashMap<>();
         for (int n : nums) {
             List<Integer> topPredict = new ArrayList<>(predictList).subList(0, n);
@@ -284,7 +284,7 @@ public class ItemPredictorTotal {
         return result;
     }
 
-    private static Map<Integer, Double> totalRate(List<Map<Integer, Double>> list) {
+    public static Map<Integer, Double> totalRate(List<Map<Integer, Double>> list) {
         int size = list.size();
         Map<Integer, Double> result = new HashMap<>();
         for (int i = 0; i < size; i++) {
@@ -305,7 +305,7 @@ public class ItemPredictorTotal {
         return result;
     }
 
-    private static Map<Integer, Double> totalConversion(List<Map<Integer, Boolean>> list) {
+    public static Map<Integer, Double> totalConversion(List<Map<Integer, Boolean>> list) {
         int size = list.size();
         Map<Integer, Double> result = new HashMap<>();
         for (int n : predictNum) {
