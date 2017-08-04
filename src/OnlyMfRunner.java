@@ -22,7 +22,7 @@ import java.util.*;
 import static org.social.test.ItemPredictorTotal.predictNum;
 
 /**
- * Created by host on 2017/8/2.
+ * Created by Gaozhen on 2017/8/2.
  */
 public class OnlyMfRunner {
 

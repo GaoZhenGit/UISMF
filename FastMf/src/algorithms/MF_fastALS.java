@@ -168,7 +168,7 @@ public class MF_fastALS extends TopKRecommender {
 		}
 	}
 	
-	protected void update_user(int u) {
+	public void update_user(int u) {
 		ArrayList<Integer> itemList = trainMatrix.getRowRef(u).indexList();
 		if (itemList.size() == 0)		return;	// user has no ratings
 		// prediction cache for the user
@@ -215,7 +215,7 @@ public class MF_fastALS extends TopKRecommender {
 		} // end for f
 	}
 	
-	protected void update_item(int i) {
+	public void update_item(int i) {
 		ArrayList<Integer> userList = trainMatrix.getColRef(i).indexList();
 		if (userList.size() == 0)		return; // item has no ratings. 
 		// prediction cache for the item
