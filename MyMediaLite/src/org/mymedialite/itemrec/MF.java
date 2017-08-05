@@ -95,8 +95,10 @@ public abstract class MF extends IncrementalItemRecommender implements IIterativ
         mTimeRecorder.print("iter " + i + " :" + (end - start) + "\n");
       }
     }
-    mTimeRecorder.flush();
-    mTimeRecorder.close();
+    if (mTimeRecorder != null) {
+      mTimeRecorder.flush();
+      mTimeRecorder.close();
+    }
   }
 
   /** Iterate once over the data */
