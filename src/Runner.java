@@ -49,6 +49,11 @@ public class Runner {
             ExtractTest.main(new String[]{"1"});
         }
 
+        if (config.runModule.mostpop) {
+            MostPop.main(null);
+            return;
+        }
+
         if (config.runModule.dirMf) {
             OnlyMfRunner.main(null);
             return;

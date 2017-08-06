@@ -22,6 +22,7 @@ public class Config {
 
     @JSONType
     public static class RunModule {
+        public boolean mostpop;
         public boolean FilterDocTest1;
         public boolean FilterDocTest2;
         public boolean ExtractTest;
