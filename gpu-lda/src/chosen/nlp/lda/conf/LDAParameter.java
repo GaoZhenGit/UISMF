@@ -12,6 +12,8 @@ public class LDAParameter {
   public static double seedParameter = 0.6;
 
   public static String timeRecordPath = "data/time/ldaIterTime.";
+
+  public static String SparsePath = "data/LdaResult/sparse.txt";
   
   public LDAParameter() {
     // TODO Auto-generated constructor stub

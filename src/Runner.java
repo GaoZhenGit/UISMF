@@ -3,6 +3,7 @@ import chosen.nlp.lda.conf.PathConfig;
 import chosen.nlp.lda.test.ExtractTest;
 import chosen.nlp.lda.test.FilterDocTest;
 import chosen.nlp.lda.test.UISTest;
+import chosen.nlp.lda.util.SparseCalculator;
 import com.alibaba.fastjson.JSON;
 import org.social.mf.MfGenerator;
 import org.social.test.ItemPredictorMultiTest;
@@ -70,6 +71,7 @@ public class Runner {
 
         if (config.runModule.UISTest2) {
             UISTest.main(new String[]{"2", "read", String.valueOf(config.ldaThreadHold)});
+            SparseCalculator.main(new String[]{String.valueOf(config.topicCount)});
         }
 
         if (config.dynamicThread) {
