@@ -175,8 +175,10 @@ public class BPRMF extends MF {
         mTimeRecorder.print("iter " + i + " :" + (end - start) + "\n");
       }
     }
-    mTimeRecorder.flush();
-    mTimeRecorder.close();
+    if (mTimeRecorder != null) {
+      mTimeRecorder.flush();
+      mTimeRecorder.close();
+    }
   }
 
   /**
