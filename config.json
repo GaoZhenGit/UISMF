@@ -9,6 +9,7 @@
   "mfIter": 10,
   "mfMethod":"org.mymedialite.itemrec.BPRMF",
   "runModule": {
+    "dirLda": true,
     "FilterDocTest1": true,
     "FilterDocTest2": true,
     "ExtractTest": true,

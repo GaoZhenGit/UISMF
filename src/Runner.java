@@ -55,6 +55,11 @@ public class Runner {
             return;
         }
 
+        if (config.runModule.dirLda) {
+            OnlyLdaRunner.main(null);
+            return;
+        }
+
         if (config.runModule.dirMf) {
             OnlyMfRunner.main(null);
             return;
