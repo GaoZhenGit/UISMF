@@ -35,7 +35,7 @@ public class UIS_LDA implements Serializable {
 
   UnionInterestSocialLDA_Variables uisVariables ;
   
-  private Documents trainSet;
+  public Documents trainSet;
   public String saveIndicator = "";
   
   public IndexFreq[][] weighMatrix;

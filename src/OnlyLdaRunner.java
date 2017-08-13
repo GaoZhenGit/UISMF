@@ -29,15 +29,24 @@ import static org.social.test.ItemPredictorTotal.predictNum;
 public class OnlyLdaRunner {
 
     private static final String Dir = "./data/dir_lda";
-    private static final String Mapping = Dir + "/mapping.txt";
-    private static final String Result = Dir + "/dir_lda.txt";
+    private static final String MappingF = Dir + "/mapf.txt";
+    private static final String MappingG = Dir + "/mapg.txt";
+    private static String Result = Dir + "/dir_lda_";
 
     public static void main(String[] args) throws Exception {
+
+        Result += Parameter.L + "_" + Parameter.iL + ".txt";
+
         UserCounter.UserItem userItem = UserCounter.getCommunityCount(Parameter.trainingDataPath);
         int f = userItem.userCount;
         int t = Parameter.L;
         int g = userItem.itemCount;
         UIS_LDA_Seperated lda = UIS_LDA_Seperated.read("./data/model/UIS.2");
+
+//        int f = lda.trainSet.docs.size();
+//        int t = lda.K;
+//        int g = lda.V;
+        System.out.println("f:" + f + " t:" + t + " g:" + g);
 
         Matrix<Double> theta = new Matrix<>(f, t);
         Matrix<Double> phi = new Matrix<>(g, t);
@@ -55,7 +64,7 @@ public class OnlyLdaRunner {
                 phi.set(j, i, item);
             }
         }
-        lda = null;
+//        lda = null;
         System.gc();
         System.out.println("transfer finish");
 
@@ -81,21 +90,37 @@ public class OnlyLdaRunner {
             dirFile.mkdir();
         }
 
-        File mappingFile = new File(Mapping);
-        PrintWriter mappingWriter = new PrintWriter(mappingFile);
-        int mappingSize = documents.indexToTermMap.size();
-        mappingWriter.write("" + mappingSize + "\n");
-        for (int i = 0; i < mappingSize; i++) {
-            String originId = documents.indexToTermMap.get(i);
-            mappingWriter.write(originId + " " + i + "\n");
+        File mapf = new File(MappingF);
+        PrintWriter writerf = new PrintWriter(mapf);
+        int mapfSize = lda.trainSet.docs.size();
+        writerf.write("" + mapfSize + "\n");
+        for (int i = 0; i < mapfSize; i++) {
+            String originId = String.valueOf(lda.trainSet.docs.get(i).docName);
+            writerf.write(originId + " " + i + "\n");
         }
-        mappingWriter.flush();
-        mappingWriter.close();
+        writerf.flush();
+        writerf.close();
 
-        EntityMapping allMapping = new EntityMapping();
-        allMapping.loadMapping(new BufferedReader(new FileReader(mappingFile)));
+        File mapg = new File(MappingG);
+        PrintWriter writerg = new PrintWriter(mapg);
+        int mapgSize = documents.indexToTermMap.size();
+        writerg.write("" + mapgSize + "\n");
+        for (int i = 0; i < mapgSize; i++) {
+            String originId = documents.indexToTermMap.get(i);
+            writerg.write(originId + " " + i + "\n");
+        }
+        writerg.flush();
+        writerg.close();
 
-        IPosOnlyFeedback testDataWrapper = ItemData.read(Parameter.testDataPath, allMapping, allMapping, false);
+
+
+        EntityMapping fmap = new EntityMapping();
+        fmap.loadMapping(new BufferedReader(new FileReader(mapf)));
+
+        EntityMapping gmap = new EntityMapping();
+        gmap.loadMapping(new BufferedReader(new FileReader(mapg)));
+
+        IPosOnlyFeedback testDataWrapper = ItemData.read(Parameter.testDataPath, fmap, gmap, false);
 
         IntList testUsers = testDataWrapper.allUsers();
         //获得测试集矩阵，用于获得当前用户的正确推荐items

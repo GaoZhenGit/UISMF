@@ -55,11 +55,6 @@ public class Runner {
             return;
         }
 
-        if (config.runModule.dirLda) {
-            OnlyLdaRunner.main(null);
-            return;
-        }
-
         if (config.runModule.dirMf) {
             OnlyMfRunner.main(null);
             return;
@@ -77,6 +72,11 @@ public class Runner {
         if (config.runModule.UISTest2) {
             UISTest.main(new String[]{"2", "read", String.valueOf(config.ldaThreadHold)});
             SparseCalculator.main(new String[]{String.valueOf(config.topicCount)});
+        }
+
+        if (config.runModule.dirLda) {
+            OnlyLdaRunner.main(null);
+            return;
         }
 
         if (config.dynamicThread) {

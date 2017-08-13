@@ -26,15 +26,14 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
   private static final long serialVersionUID = -1679600151879194809L;
 
   UnionInterestSocialLDA_Variables uisVariables ;
-  
-  private Documents trainSet;
+
   public String saveIndicator = "";
   
   public IndexFreq[][] weighMatrix;
   public int [] weighSum ; 
  
   int [][] doc;//word index array
-  int V, K, M;//vocabulary size, topic number, document number
+  public int V, K, M;//vocabulary size, topic number, document number
   int [][] z;//topic label array
   double alpha; //doc-topic dirichlet prior parameter 
   double beta; //topic-word dirichlet prior parameter
@@ -53,7 +52,7 @@ public class UIS_LDA_Seperated extends UIS_LDA implements Serializable {
   
   static int S_up = UnionInterestSocialLDA_Variables.S_up;
   static int S_down = UnionInterestSocialLDA_Variables.S_down;
-  int follower_doc_map[];
+  public int follower_doc_map[];
   public String serialPath ;
   int I ;
   

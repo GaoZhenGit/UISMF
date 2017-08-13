@@ -7,9 +7,9 @@
   "ldaIter": 101,
   "mfFactors": 16,
   "mfIter": 10,
-  "mfMethod":"org.mymedialite.itemrec.BPRMF",
+  "mfMethod":"org.mymedialite.itemrec.WRMF",
   "runModule": {
-    "dirLda": true,
+    "dirLda": false,
     "FilterDocTest1": true,
     "FilterDocTest2": true,
     "ExtractTest": true,
