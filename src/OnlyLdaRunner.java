@@ -74,8 +74,11 @@ public class OnlyLdaRunner {
                 double item = MatrixExtensions.rowScalarProduct(theta, i, phi, j);
                 totalmatrix.set(i, j, item);
             }
-            System.out.println(((double) i / f));
+            if (i % 100 ==0) {
+                System.out.println("multi:" + ((double) i / f));
+            }
         }
+        System.out.println("multiply finish");
 
         theta = null;
         phi = null;
@@ -90,6 +93,7 @@ public class OnlyLdaRunner {
             dirFile.mkdir();
         }
 
+        //构造follower的mapping文件
         File mapf = new File(MappingF);
         PrintWriter writerf = new PrintWriter(mapf);
         int mapfSize = lda.trainSet.docs.size();
@@ -101,6 +105,7 @@ public class OnlyLdaRunner {
         writerf.flush();
         writerf.close();
 
+        //构造followee的mapping文件
         File mapg = new File(MappingG);
         PrintWriter writerg = new PrintWriter(mapg);
         int mapgSize = documents.indexToTermMap.size();
@@ -136,7 +141,7 @@ public class OnlyLdaRunner {
         for (int ti = 0; ti < testUserSize; ti++) {
             Integer testUserId = testUsers.get(ti);
             if (ti % 100 == 0) {
-                System.out.println((double) ti / testUserSize);
+                System.out.println("predict:" + (double) ti / testUserSize);
             }
             if (testUserId >= totalmatrix.dim1) {
                 continue;

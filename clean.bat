@@ -10,3 +10,4 @@ del/q data\GPUResult\all\*
 del/q data\keepdata.txt
 del/q data\mutualLink.txt
 del/q data\testdata.txt
+del/q data\dir_lda\*
