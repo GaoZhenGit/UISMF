@@ -20,7 +20,7 @@ import static org.social.test.ItemPredictorTotal.predictNum;
  */
 public class CommonPredictor {
     public static void predict(
-            Matrix<Double> totalmatrix,
+            BigMatrix<Double> totalmatrix,
             EntityMapping fmap,
             EntityMapping gmap,
             String testSetPath,

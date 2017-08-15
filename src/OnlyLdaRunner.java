@@ -68,7 +68,7 @@ public class OnlyLdaRunner {
         System.gc();
         System.out.println("transfer finish");
 
-        Matrix<Double> totalmatrix = new Matrix<>(f, g);
+        BigMatrix<Double> totalmatrix = new BigMatrix<>(f, g);
         for (int i = 0; i < f; i++) {
             for (int j = 0; j < g; j++) {
                 double item = MatrixExtensions.rowScalarProduct(theta, i, phi, j);

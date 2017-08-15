@@ -43,7 +43,7 @@ public class OnlyMfRunner {
         }
 
         mf();
-        Matrix<Double> matrix = multiply();
+        BigMatrix<Double> matrix = multiply();
         predict(matrix);
     }
 
@@ -71,14 +71,14 @@ public class OnlyMfRunner {
         mf.saveModel(MfResultPath);
     }
 
-    private static Matrix<Double> multiply() throws Exception{
+    private static BigMatrix<Double> multiply() throws Exception{
         System.out.println("start multiply");
         MF mf = MfGenerator.generate().newInstance();
         mf.loadModel(MfResultPath);
         int userNum = mf.maxUserID() + 1;
         int itemNum = mf.maxItemID() + 1;
 
-        Matrix<Double> mutil = new Matrix<>(userNum, itemNum);
+        BigMatrix<Double> mutil = new BigMatrix<>(userNum, itemNum);
         for (int i = 0; i < userNum; i++) {
             for (int j = 0; j < itemNum; j++) {
                 mutil.set(i, j, mf.predict(i, j));
@@ -93,7 +93,7 @@ public class OnlyMfRunner {
         return mutil;
     }
 
-    private static void predict(Matrix<Double> totalmatrix) throws Exception {
+    private static void predict(BigMatrix<Double> totalmatrix) throws Exception {
         //全局用户id映射
         EntityMapping totalUserMapping = loadMapping(UserMappingPath);
         //全局物品id映射
