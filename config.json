@@ -5,6 +5,7 @@
   "interestTopicCount": 10,
   "ldaThreadHold": 0.02,
   "ldaIter": 101,
+  "ldaMode":"cb",
   "mfFactors": 16,
   "mfIter": 10,
   "mfMethod":"org.mymedialite.itemrec.WRMF",

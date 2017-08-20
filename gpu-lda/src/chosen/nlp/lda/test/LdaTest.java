@@ -19,13 +19,15 @@ public class LdaTest {
     //read files from path
     //DocsIn.readDocs(PathConfig.LdaTrainSetPath);
     //read structured file 
-    Scanner scanner = new Scanner(System.in);
+//    Scanner scanner = new Scanner(System.in);
     System.out.println("How many Topics?");
-    LDAParameter.K = scanner.nextInt();
+//    LDAParameter.K = scanner.nextInt();
+    System.out.println("" + LDAParameter.K);
     
     System.out.println("enter threshold:");
-    LDA_Community.threshold = scanner.nextDouble();
-    scanner.close();
+    LDA_Community.threshold = Double.parseDouble(args[0]);
+    System.out.println("" + LDA_Community.threshold);
+//    scanner.close();
     
     Documents documents = new Documents();
     if(args[0].equals("0")) {

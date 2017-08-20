@@ -2,6 +2,7 @@ import chosen.nlp.lda.conf.LDAParameter;
 import chosen.nlp.lda.conf.PathConfig;
 import chosen.nlp.lda.test.ExtractTest;
 import chosen.nlp.lda.test.FilterDocTest;
+import chosen.nlp.lda.test.LdaTest;
 import chosen.nlp.lda.test.UISTest;
 import chosen.nlp.lda.util.SparseCalculator;
 import com.alibaba.fastjson.JSON;
@@ -62,9 +63,17 @@ public class Runner {
 
         if (config.runModule.UISTest1) {
             long start = System.currentTimeMillis();
-            UISTest.main(new String[]{"2",
-                    String.valueOf(config.interestTopicCount),
-                    String.valueOf(config.ldaThreadHold), "0.01"});
+            if (config.ldaMode.equals("normal")) {
+                System.out.println("start normal lda");
+                UISTest.main(new String[]{"2",
+                        String.valueOf(config.interestTopicCount),
+                        String.valueOf(config.ldaThreadHold), "0.01"});
+            } else if (config.ldaMode.equals("cb")) {
+                System.out.println("start cb lda");
+                LdaTest.main(new String[]{
+                        String.valueOf(config.ldaThreadHold)
+                });
+            }
             long end = System.currentTimeMillis();
             recordTime(start, end, "lda");
         }

@@ -8,6 +8,7 @@ public class Config {
     public int dataFilter;
     public int topicCount;
     public int interestTopicCount;
+    public String ldaMode;
     public RunModule runModule;
     public boolean dynamicThread;
     public double ldaThreadHold;
