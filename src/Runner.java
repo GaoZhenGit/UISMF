@@ -123,7 +123,9 @@ public class Runner {
 
         if (config.runModule.predict) {
             long start = System.currentTimeMillis();
-            ItemPredictorTotal.main(new String[]{"3"});
+            ItemPredictorTotal.main(new String[]{
+                    "3",
+                    Parameter.maxF1Path + config.ldaMode + ".all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL});
             long end = System.currentTimeMillis();
             recordTime(start, end, "predict");
         }

@@ -43,7 +43,7 @@ public class ItemPredictorTotal {
         if (args == null || args.length == 0) {
             multiply();
             score();
-            predict();
+            predict(Parameter.maxF1Path + "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL);
         } else {
             switch (args[0]) {
                 case "1":
@@ -53,7 +53,7 @@ public class ItemPredictorTotal {
                     score();
                     break;
                 case "3":
-                    predict();
+                    predict(args[1]);
                     break;
                 default:
                     break;
@@ -122,7 +122,7 @@ public class ItemPredictorTotal {
         System.out.println("total matrix finish");
     }
 
-    private static void predict() {
+    private static void predict(String outputPath) {
         //全局用户id映射
         EntityMapping totalUserMapping = loadMapping(totalUserMappingPath);
         //全局物品id映射
@@ -193,7 +193,7 @@ public class ItemPredictorTotal {
             Map<Integer, Double> con = totalConversion(conList);
             Map<Integer, Double> mrr = totalRate(mrrList);
 
-            String pathString =  Parameter.maxF1Path + "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL;
+            String pathString =  outputPath;
             System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
             DecimalFormat df = new DecimalFormat("0.000000000000000000");
