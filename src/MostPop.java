@@ -1,6 +1,4 @@
 import org.mymedialite.eval.measures.PrecisionAndRecall;
-import org.social.mf.MfGenerator;
-import org.social.test.ItemPredictorTotal;
 import org.social.util.Parameter;
 
 import java.io.File;

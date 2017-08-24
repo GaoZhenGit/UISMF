@@ -8,7 +8,6 @@ import chosen.nlp.lda.util.SparseCalculator;
 import com.alibaba.fastjson.JSON;
 import org.social.mf.MfGenerator;
 import org.social.test.ItemPredictorMultiTest;
-import org.social.test.ItemPredictorTotal;
 import org.social.util.Parameter;
 
 import java.io.File;

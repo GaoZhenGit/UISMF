@@ -1,5 +1,3 @@
-package org.social.test;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.mymedialite.data.EntityMapping;
 import org.mymedialite.data.IPosOnlyFeedback;
@@ -92,11 +90,11 @@ public class ItemPredictorTotal {
         //全局物品id映射
         EntityMapping totalItemMapping = new EntityMapping();
 
-        Matrix<Double> totalMatrix = new Matrix<>(totalUser, totalItem);
+        BigMatrix<Double> totalMatrix = new BigMatrix<>(totalUser, totalItem);
 
         for (int i = 0; i < Parameter.L; i++) {
             //从硬盘读取当前社区的相乘后的矩阵
-            Matrix<Double> communityMatrix = (Matrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + i);
+            BigMatrix<Double> communityMatrix = (BigMatrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + i);
             System.out.println(communityMatrix.dim1 + ":" + communityMatrix.dim2);
             //读取当前社区的id映射
             String userMapPath = Parameter.communityDir + "all/" + Parameter.cfmap + i;
@@ -132,7 +130,7 @@ public class ItemPredictorTotal {
             IPosOnlyFeedback testDataWrapper = ItemData.read(Parameter.testDataPath, totalUserMapping, totalItemMapping, false);
             System.out.println("test set readed");
             //读取总矩阵
-            Matrix<Double> totalmatrix = (Matrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
+            BigMatrix<Double> totalmatrix = (BigMatrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
             System.out.println("total matrix readed");
 
             IntList testUsers = testDataWrapper.allUsers();
@@ -219,7 +217,7 @@ public class ItemPredictorTotal {
 
     }
 
-    private static void max(Matrix<Double> totalMatrix, int ti, int tj, double communityValue) {
+    private static void max(BigMatrix<Double> totalMatrix, int ti, int tj, double communityValue) {
         Double originValue = totalMatrix.get(ti, tj);
         if (originValue == null) {
             originValue = 0.0;
@@ -337,8 +335,9 @@ public class ItemPredictorTotal {
             mf.loadModel(modelPath);
             int userNum = mf.maxUserID() + 1;
             int itemNum = mf.maxItemID() + 1;
+            System.out.println(modelPath + " user:" + userNum + " item:" + itemNum);
 
-            Matrix<Double> mutil = new Matrix<>(userNum, itemNum);
+            BigMatrix<Double> mutil = new BigMatrix<>(userNum, itemNum);
             for (int i = 0; i < userNum; i++) {
                 for (int j = 0; j < itemNum; j++) {
                     mutil.set(i, j, mf.predict(i, j));

@@ -1,25 +1,14 @@
-import it.unimi.dsi.fastutil.ints.IntList;
 import org.mymedialite.data.EntityMapping;
 import org.mymedialite.data.IPosOnlyFeedback;
-import org.mymedialite.data.WeightedItem;
-import org.mymedialite.datatype.IBooleanMatrix;
-import org.mymedialite.datatype.Matrix;
-import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.MF;
 import org.social.mf.MfGenerator;
-import org.social.test.ItemPredictorTotal;
-import org.social.util.FileCacheUtil;
 import org.social.util.Parameter;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.util.*;
-
-import static org.social.test.ItemPredictorTotal.predictNum;
 
 /**
  * Created by Gaozhen on 2017/8/2.

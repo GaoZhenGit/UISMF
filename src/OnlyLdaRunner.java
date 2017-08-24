@@ -1,27 +1,13 @@
-import chosen.nlp.lda.conf.LDAParameter;
 import chosen.nlp.lda.conf.PathConfig;
 import chosen.nlp.lda.model.UIS_LDA_Seperated;
 import chosen.nlp.lda.util.Documents;
-import chosen.social.lda.util.CommunityData;
-import it.unimi.dsi.fastutil.ints.IntList;
 import org.mymedialite.data.EntityMapping;
-import org.mymedialite.data.IPosOnlyFeedback;
-import org.mymedialite.data.WeightedItem;
-import org.mymedialite.datatype.IBooleanMatrix;
 import org.mymedialite.datatype.Matrix;
 import org.mymedialite.datatype.MatrixExtensions;
-import org.mymedialite.eval.measures.PrecisionAndRecall;
-import org.mymedialite.io.ItemData;
-import org.social.mf.MfGenerator;
-import org.social.test.ItemPredictorTotal;
 import org.social.util.Parameter;
 import org.social.util.UserCounter;
 
 import java.io.*;
-import java.text.DecimalFormat;
-import java.util.*;
-
-import static org.social.test.ItemPredictorTotal.predictNum;
 
 /**
  * Created by Gaozhen on 2017/8/4.

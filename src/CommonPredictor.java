@@ -3,17 +3,14 @@ import org.mymedialite.data.EntityMapping;
 import org.mymedialite.data.IPosOnlyFeedback;
 import org.mymedialite.data.WeightedItem;
 import org.mymedialite.datatype.IBooleanMatrix;
-import org.mymedialite.datatype.Matrix;
 import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.io.ItemData;
-import org.social.test.ItemPredictorTotal;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import static org.social.test.ItemPredictorTotal.predictNum;
 
 /**
  * Created by host on 2017/8/14.
@@ -69,15 +66,15 @@ public class CommonPredictor {
             Collection<Integer> correct_items = itemGetter.get(testUserId);
 
 
-            Map<Integer, Double> prec = PrecisionAndRecall.precisionAt(predictList, correct_items, new HashSet<Integer>(), predictNum);
+            Map<Integer, Double> prec = PrecisionAndRecall.precisionAt(predictList, correct_items, new HashSet<Integer>(), ItemPredictorTotal.predictNum);
             precList.add(prec);
-            Map<Integer, Double> recall = PrecisionAndRecall.recallAt(predictList, correct_items, new HashSet<Integer>(), predictNum);
+            Map<Integer, Double> recall = PrecisionAndRecall.recallAt(predictList, correct_items, new HashSet<Integer>(), ItemPredictorTotal.predictNum);
             recallList.add(recall);
-            Map<Integer, Double> ndcg = ItemPredictorTotal.ndcg(predictList, correct_items, predictNum);
+            Map<Integer, Double> ndcg = ItemPredictorTotal.ndcg(predictList, correct_items, ItemPredictorTotal.predictNum);
             ndcgList.add(ndcg);
-            Map<Integer, Boolean> con = ItemPredictorTotal.conversionHit(predictList, correct_items, predictNum);
+            Map<Integer, Boolean> con = ItemPredictorTotal.conversionHit(predictList, correct_items, ItemPredictorTotal.predictNum);
             conList.add(con);
-            Map<Integer, Double> mrr = ItemPredictorTotal.mrr(predictList, correct_items, predictNum);
+            Map<Integer, Double> mrr = ItemPredictorTotal.mrr(predictList, correct_items, ItemPredictorTotal.predictNum);
             mrrList.add(mrr);
         }
 
@@ -91,7 +88,7 @@ public class CommonPredictor {
         PrintWriter resultWriter = new PrintWriter(new File(resultPath));
         DecimalFormat df = new DecimalFormat("0.000000000000000000");
         DecimalFormat df1 = new DecimalFormat("00");
-        for (int n : predictNum) {
+        for (int n : ItemPredictorTotal.predictNum) {
             double precV = prec.get(n);
             double recallV = recall.get(n);
             double f1 = (2 * precV * recallV) / (precV + recallV);
