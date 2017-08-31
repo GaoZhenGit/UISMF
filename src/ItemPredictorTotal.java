@@ -41,7 +41,7 @@ public class ItemPredictorTotal {
         if (args == null || args.length == 0) {
             multiply();
             score();
-            predict(Parameter.maxF1Path + "all." + MfGenerator.methodName() +"." + Parameter.L + ".I" + Parameter.iL);
+            predict(Parameter.maxF1Path + "all." + MfGenerator.methodName() + "." + Parameter.L + ".I" + Parameter.iL);
         } else {
             switch (args[0]) {
                 case "1":
@@ -191,7 +191,7 @@ public class ItemPredictorTotal {
             Map<Integer, Double> con = totalConversion(conList);
             Map<Integer, Double> mrr = totalRate(mrrList);
 
-            String pathString =  outputPath;
+            String pathString = outputPath;
             System.out.println("output path: " + pathString);
             PrintWriter resultWriter = new PrintWriter(new File(pathString));
             DecimalFormat df = new DecimalFormat("0.000000000000000000");
@@ -336,15 +336,20 @@ public class ItemPredictorTotal {
             int userNum = mf.maxUserID() + 1;
             int itemNum = mf.maxItemID() + 1;
             System.out.println(modelPath + " user:" + userNum + " item:" + itemNum);
-
-            BigMatrix<Double> mutil = new BigMatrix<>(userNum, itemNum);
-            for (int i = 0; i < userNum; i++) {
-                for (int j = 0; j < itemNum; j++) {
-                    mutil.set(i, j, mf.predict(i, j));
+            BigMatrix<Double> multi;
+            if (userNum > 40000 || itemNum > 40000) {
+                multi = new BigMatrix<>(1, 1);
+                multi.set(0, 0, 0.0);
+            } else {
+                multi = new BigMatrix<>(userNum, itemNum);
+                for (int i = 0; i < userNum; i++) {
+                    for (int j = 0; j < itemNum; j++) {
+                        multi.set(i, j, mf.predict(i, j));
+                    }
                 }
             }
-            FileCacheUtil.saveDiskCache(mutil, savePath);
-            return mutil;
+            FileCacheUtil.saveDiskCache(multi, savePath);
+            return multi;
         }
     }
 
