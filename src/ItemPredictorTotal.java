@@ -5,6 +5,7 @@ import org.mymedialite.data.WeightedItem;
 import org.mymedialite.datatype.IBooleanMatrix;
 import org.mymedialite.datatype.IMatrix;
 import org.mymedialite.datatype.Matrix;
+import org.mymedialite.datatype.SparseMatrix;
 import org.mymedialite.eval.measures.NDCG;
 import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.eval.measures.ReciprocalRank;
@@ -90,7 +91,7 @@ public class ItemPredictorTotal {
         //全局物品id映射
         EntityMapping totalItemMapping = new EntityMapping();
 
-        BigMatrix<Double> totalMatrix = new BigMatrix<>(totalUser, totalItem);
+        SparseMatrix<Double> totalMatrix = new SparseMatrix<>(totalUser, totalItem);
 
         for (int i = 0; i < Parameter.L; i++) {
             //从硬盘读取当前社区的相乘后的矩阵
@@ -130,7 +131,7 @@ public class ItemPredictorTotal {
             IPosOnlyFeedback testDataWrapper = ItemData.read(Parameter.testDataPath, totalUserMapping, totalItemMapping, false);
             System.out.println("test set readed");
             //读取总矩阵
-            BigMatrix<Double> totalmatrix = (BigMatrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
+            SparseMatrix<Double> totalmatrix = (SparseMatrix<Double>) FileCacheUtil.loadDiskCache(Parameter.matrixPath + "Total");
             System.out.println("total matrix readed");
 
             IntList testUsers = testDataWrapper.allUsers();
@@ -149,13 +150,13 @@ public class ItemPredictorTotal {
                 if (ti % 100 == 0) {
                     System.out.println((double) ti / testUserSize);
                 }
-                if (testUserId >= totalmatrix.dim1) {
+                if (testUserId >= totalmatrix.numberOfRows()) {
                     continue;
                 }
                 //取出矩阵的一行，然后根据score大到小排序，然后将下标排成List，形成推荐列表
-                List<Double> scoreList = totalmatrix.getRow(testUserId);
-                List<WeightedItem> tmpList = new ArrayList<>(scoreList.size());
-                for (int i = 0; i < scoreList.size(); i++) {
+                Map<Integer, Double> scoreList = totalmatrix.get(testUserId);
+                List<WeightedItem> tmpList = new ArrayList<>(totalmatrix.numberOfColumns());
+                for (int i = 0; i < totalmatrix.numberOfColumns(); i++) {
                     Double score = scoreList.get(i);
                     WeightedItem item = new WeightedItem();
                     item.item_id = i;
@@ -217,7 +218,7 @@ public class ItemPredictorTotal {
 
     }
 
-    private static void max(BigMatrix<Double> totalMatrix, int ti, int tj, double communityValue) {
+    private static void max(IMatrix<Double> totalMatrix, int ti, int tj, double communityValue) {
         Double originValue = totalMatrix.get(ti, tj);
         if (originValue == null) {
             originValue = 0.0;
