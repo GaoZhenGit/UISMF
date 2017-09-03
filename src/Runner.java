@@ -178,7 +178,7 @@ public class Runner {
     }
 
     private static void recordTime(long spend, String path) {
-        File file = new File("data/time/" + path + ".txt");
+        File file = new File(path + ".txt");
         if (!file.exists()) {
             file.getParentFile().mkdir();
         }
