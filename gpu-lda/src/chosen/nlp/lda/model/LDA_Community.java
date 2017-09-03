@@ -1,9 +1,6 @@
 package chosen.nlp.lda.model;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -120,6 +117,14 @@ public class LDA_Community {
 //      System.err.println("Error: the number of iterations should be larger than " + (saveStep + beginSaveIters));
 //      System.exit(0);
 //    }
+    String pathString = LDAParameter.timeRecordPath + "cb." + LDAParameter.K;
+    File file = new File(pathString + ".txt");
+    if (!file.exists()) {
+      file.getParentFile().mkdir();
+    }
+    PrintWriter timeWriter = new PrintWriter(file);
+
+
     for(int i = 0; i < iterations; i++){
       System.out.println("Iteration " + i);
       if((i >= beginSaveIters) && (((i - beginSaveIters) % saveStep) == 0)){
@@ -133,7 +138,7 @@ public class LDA_Community {
         saveCommunity (i, trainSet);
         
       }
-      
+      long startTime = System.currentTimeMillis();
       //Use Gibbs Sampling to update z[][]
       for(int m = 0; m < M; m++){
         int N = trainSet.docs.get(m).docWords.length;
@@ -143,7 +148,12 @@ public class LDA_Community {
           z[m][n] = newTopic;
         }
       }
+      long endTime = System.currentTimeMillis();
+
+      timeWriter.write("Iteration " + i + ": " + (endTime - startTime) + "\n");
     }
+    timeWriter.flush();
+    timeWriter.close();
   }
   
 

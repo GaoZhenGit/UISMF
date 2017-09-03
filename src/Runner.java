@@ -26,12 +26,16 @@ public class Runner {
         Config config = getConfig(args[0]);
 
         LDAParameter.K = Parameter.L = config.topicCount;
-        LDAParameter.iterations = config.ldaIter;
+        LDAParameter.iterations = config.ldaIter + 1;
+        LDAParameter.saveStep = config.ldaIter;
+        LDAParameter.beginSaveIters = config.ldaIter;
         Parameter.mfFactors = config.mfFactors;
         Parameter.mfIter = config.mfIter;
         Parameter.iL = config.interestTopicCount;
         FilterDocTest.filterBehind = config.dataFilter;
         MfGenerator.className = config.mfMethod;
+
+        long totalStart = System.currentTimeMillis();
 
         if (config.dataSetPath != null && config.dataSetPath.length() != 0) {
             PathConfig.twitterUserLinksFile = config.dataSetPath;
@@ -52,11 +56,15 @@ public class Runner {
 
         if (config.runModule.mostpop) {
             MostPop.main(null);
+            long spendTime = System.currentTimeMillis() - totalStart;
+            recordTime(spendTime, "data/time/mostop.txt");
             return;
         }
 
         if (config.runModule.dirMf) {
             OnlyMfRunner.main(null);
+            long spendTime = System.currentTimeMillis() - totalStart;
+            recordTime(spendTime, "data/time/dirmf.txt");
             return;
         }
 
@@ -84,6 +92,8 @@ public class Runner {
 
         if (config.runModule.dirLda) {
             OnlyLdaRunner.main(null);
+            long spendTime = System.currentTimeMillis() - totalStart;
+            recordTime(spendTime, "data/time/dirlda.txt");
             return;
         }
 
@@ -129,6 +139,9 @@ public class Runner {
             recordTime(start, end, "predict");
         }
 
+        long totalEnd = System.currentTimeMillis();
+        recordTime(totalStart, totalEnd, "tota;");
+
         mTimeWriter.flush();
         mTimeWriter.close();
     }
@@ -160,6 +173,21 @@ public class Runner {
             mTimeWriter.write(line);
             mTimeWriter.flush();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void recordTime(long spend, String path) {
+        File file = new File("data/time/" + path + ".txt");
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+        }
+        try {
+            PrintWriter printWriter = new PrintWriter(file);
+            printWriter.write("spend:" + spend);
+            printWriter.flush();
+            printWriter.close();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

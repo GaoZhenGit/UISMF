@@ -6,6 +6,7 @@ import org.mymedialite.io.ItemData;
 import org.mymedialite.itemrec.MF;
 import org.social.util.Parameter;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.concurrent.Callable;
 
@@ -25,6 +26,8 @@ public class MFThread implements Callable<MF>{
     String userMapPath;
     EntityMapping itemMapping;
     String itemMapPath;
+
+    String TIME_PATH = "./data/time/mf_" + MfGenerator.className + ".txt";
 
     public MFThread(String dataPath,
                     String path,
@@ -63,6 +66,7 @@ public class MFThread implements Callable<MF>{
         itemWriter.close();
 
         mf.setFeedback(training_data);
+        mf.setTimeRecorder(new PrintWriter(new File(TIME_PATH)));
 
         userMapping = null;
         itemMapping = null;

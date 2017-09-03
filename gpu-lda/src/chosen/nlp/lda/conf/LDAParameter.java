@@ -7,7 +7,7 @@ public class LDAParameter {
   public static float beta = (float) 0.01;//topic-word dirichlet prior parameter
   public static int iterations = 100;//Times of iterations
   public static int saveStep = 100 ;//The number of iterations between two saving
-  public static int beginSaveIters = 100;//Begin save model at this iteration
+  public static int beginSaveIters = 1;//Begin save model at this iteration
   
   public static double seedParameter = 0.6;
 
