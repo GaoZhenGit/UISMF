@@ -17,7 +17,6 @@ import java.util.StringTokenizer;
 
 import chosen.nlp.lda.conf.PathConfig;
 import chosen.social.lda.util.Link;
-import chosen.social.lda.util.TwitterIDUtil;
 
 public class ReadDocTest {
 	

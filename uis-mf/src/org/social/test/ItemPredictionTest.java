@@ -39,9 +39,9 @@ import org.social.util.Parameter;
 import org.social.mf.WRMFThread;
 import org.social.util.QuickTopN.PairComparable;
 
-import chosen.social.lda.util.CommunityData;
-import chosen.social.lda.util.IDUtil;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.CommunityData;
+import common.IDUtil;
+import common.TwitterIDUtil;
 
 public class ItemPredictionTest {
   
@@ -130,10 +130,10 @@ public class ItemPredictionTest {
       }
     }
     /*
-    IDUtil idUtil = new IDUtil();
+    common.IDUtil idUtil = new common.IDUtil();
     idUtil = idUtil.read();
-    TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
-    TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
+    common.TwitterIDUtil.IDToIndexMap = idUtil.IDToIndexMap;
+    common.TwitterIDUtil.indexToIDMap = idUtil.indexToIDMap;
     
     SparseMatrix<Double> max_Matrix = 
         new SparseMatrix<Double>(testData.maxUserID(), testData.maxItemID(), 0.0);
@@ -161,7 +161,7 @@ public class ItemPredictionTest {
         null,null, communityData, medium);
       /*
       for(Integer user: training_data.allUsers()) {
-        //user = TwitterIDUtil.getIndex(user.toString());
+        //user = common.TwitterIDUtil.getIndex(user.toString());
         TreeSet<Pair<Integer, Double>> prec_set = 
             new TreeSet<Pair<Integer, Double>>(new PairComparable());
         List<Pair<Integer, Double>> topList = new ArrayList<Pair<Integer,Double>>(1000);
@@ -169,12 +169,12 @@ public class ItemPredictionTest {
         candidate_items_for_pre = Utils.intersect(candidate_items_for_pre, training_data.allItems());
         Double r;
         for (Integer item : candidate_items_for_pre) {
-          //item =  TwitterIDUtil.getIndex(String.valueOf(item));
+          //item =  common.TwitterIDUtil.getIndex(String.valueOf(item));
           r = recommender.predict(user, item);
           if (r > max_Matrix.get(user, item)) {
             max_Matrix.set(user, item, r);
           }
-          int orgIdIndex = Integer.parseInt(TwitterIDUtil.getID(user));
+          int orgIdIndex = Integer.parseInt(common.TwitterIDUtil.getID(user));
           r = r * communityData.getTheta(orgIdIndex, i);  //F1 score need to implement theta * prediction 
           r += sum_Matrix.get(user, item);
           sum_Matrix.set(user, item, r);  //recommender.predict(user_id, item_id);

@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.mymedialite.datatype.Pair;
 
-import chosen.social.lda.util.CommunityData;
 
 public class SerializedPrecMatrix implements Serializable {
   

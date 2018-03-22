@@ -1,9 +1,11 @@
 package chosen.social.lda.util;
 
+import common.TwitterIDUtil;
+
 public class Link {
 	
 	//Link中存放的是ID对应的index，而不是本身
-	public int follower; // map id to TwitterIDUtil 's index, in link ,index are used
+	public int follower; // map id to common.TwitterIDUtil 's index, in link ,index are used
 	public int followee; 
 	
 	public Link() {

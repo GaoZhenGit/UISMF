@@ -19,9 +19,9 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import chosen.nlp.lda.conf.PathConfig;
-import chosen.social.lda.util.IDUtil;
+import common.IDUtil;
 import chosen.social.lda.util.Link;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.TwitterIDUtil;
 
 public class BigFileFilter {
 	public static double ration = 0;

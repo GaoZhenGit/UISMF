@@ -18,7 +18,7 @@ import chosen.nlp.lda.util.Documents;
 import chosen.nlp.lda.util.FileUtil;
 import chosen.nlp.lda.util.Documents.Document;
 import chosen.social.lda.util.Community;
-import chosen.social.lda.util.CommunityData;
+import common.CommunityData;
 import chosen.social.lda.util.GeneralizedPolyaMetric;
 import chosen.social.lda.util.IndexFreq;
 

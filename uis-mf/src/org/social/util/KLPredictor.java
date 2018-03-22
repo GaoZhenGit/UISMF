@@ -18,8 +18,8 @@ import org.mymedialite.eval.measures.PrecisionAndRecall;
 import org.mymedialite.eval.measures.ReciprocalRank;
 import org.mymedialite.util.Utils;
 
-import chosen.social.lda.util.CommunityData;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.CommunityData;
+import common.TwitterIDUtil;
 
 public class KLPredictor implements Callable<PredictorParameter>{
   PredictorParameter pp;

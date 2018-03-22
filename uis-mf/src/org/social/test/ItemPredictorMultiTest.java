@@ -29,9 +29,9 @@ import org.social.mf.MFThread;
 import org.social.util.*;
 import org.social.util.QuickTopN.PairComparable;
 
-import chosen.social.lda.util.CommunityData;
-import chosen.social.lda.util.IDUtil;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.CommunityData;
+import common.IDUtil;
+import common.TwitterIDUtil;
 
 public class ItemPredictorMultiTest {
 

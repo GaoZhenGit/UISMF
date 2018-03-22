@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import chosen.nlp.lda.conf.PathConfig;
 import chosen.nlp.lda.util.Documents;
 import chosen.social.lda.util.Link;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.TwitterIDUtil;
 
 public class ExtractLatentLink {
 	//Soft reference: soft references are most often to implement memory-sensitive caches

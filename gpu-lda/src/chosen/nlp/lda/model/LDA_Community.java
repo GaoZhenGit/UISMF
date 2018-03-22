@@ -15,7 +15,7 @@ import chosen.nlp.lda.util.Documents;
 import chosen.nlp.lda.util.Documents.Document;
 import chosen.nlp.lda.util.FileUtil;
 import chosen.social.lda.util.Community;
-import chosen.social.lda.util.CommunityData;
+import common.CommunityData;
 public class LDA_Community {
   private Documents trainSet;
   public String saveIndicator = "";

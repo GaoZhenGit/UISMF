@@ -33,9 +33,9 @@ import org.social.util.KLRecommender;
 import org.social.util.Parameter;
 import org.social.util.PredictorParameter;
 
-import chosen.social.lda.util.CommunityData;
-import chosen.social.lda.util.IDUtil;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.CommunityData;
+import common.IDUtil;
+import common.TwitterIDUtil;
 
 public class ItemKLPredictionTest {
 

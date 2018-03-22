@@ -23,9 +23,9 @@ import org.social.util.Parameter;
 import org.social.util.PredictorParameter;
 import org.social.util.TMPredictor;
 
-import chosen.social.lda.util.CommunityData;
-import chosen.social.lda.util.IDUtil;
-import chosen.social.lda.util.TwitterIDUtil;
+import common.CommunityData;
+import common.IDUtil;
+import common.TwitterIDUtil;
 
 public class TMPredictionTest {
 
