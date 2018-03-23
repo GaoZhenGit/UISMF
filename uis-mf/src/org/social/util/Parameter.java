@@ -9,7 +9,7 @@ public class Parameter {
   public static String cname = "c_";
   public static String cfmap = "c_fmap";
   public static String cgmap = "c_gmap";
-  public static String matrixPath = "data/LdaResult/matirx/matrix";
+  public static String matrixPath = "data/LdaResult/matrix/matrix";
   public static String maxF1Path = "data/LdaResult/wb/maxF1.";
   public static String sumF1Path = "data/LdaResult/wb/sumF1.";
   public static String IFMFPath = "data/LdaResult/wb/IFMF/IFMF.";

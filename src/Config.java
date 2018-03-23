@@ -19,6 +19,7 @@ public class Config {
     public int sumThreadCount;
     public String dataSetPath;
     public String mfMethod;
+    public String tifmfPath;
 
 
     @JSONType

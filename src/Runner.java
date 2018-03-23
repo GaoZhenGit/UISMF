@@ -34,6 +34,7 @@ public class Runner {
         Parameter.iL = config.interestTopicCount;
         FilterDocTest.filterBehind = config.dataFilter;
         MfGenerator.className = config.mfMethod;
+        com.gz.TIFMF.pyPath = config.tifmfPath;
 
         long totalStart = System.currentTimeMillis();
 
