@@ -11,6 +11,7 @@
   "mfMethod2":"org.mymedialite.itemrec.WRMF",
   "mfMethod":"com.gz.TIFMF",
   "tifmfPath":"./TIFMF/src/",
+  "tifmfFitNum":1,
   "runModule": {
     "dirLda": false,
     "FilterDocTest1": true,
@@ -27,5 +28,6 @@
   },
   "dynamicThread": false,
   "mfThreadCount": 5,
+  "multiplyThreadCount": 5,
   "sumThreadCount": 1
 }

@@ -30,7 +30,7 @@ import java.util.concurrent.*;
  */
 public class ItemPredictorTotal {
 
-    public static int mfThreadCount = 1;
+    public static int multiplyThreadCount = 1;
 
     public static int[] predictNum = new int[]{5, 10, 15, 20, 25, 30, 35, 40, 50};
 
@@ -61,7 +61,7 @@ public class ItemPredictorTotal {
     }
 
     private static void multiply() {
-        ExecutorService exec = Executors.newFixedThreadPool(mfThreadCount);
+        ExecutorService exec = Executors.newFixedThreadPool(multiplyThreadCount);
         List<Future<IMatrix<Double>>> taskList = new ArrayList<>();
         for (int i = 0; i < Parameter.L; i++) {
             MatrixMultiplier matrixMultiplier = new MatrixMultiplier(Parameter.IFMFPath + "all." + i, Parameter.matrixPath + i);

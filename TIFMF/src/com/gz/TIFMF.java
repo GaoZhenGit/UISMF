@@ -21,6 +21,7 @@ import java.util.Scanner;
 public class TIFMF extends MF {
 
     public static String pyPath;
+    public static int tifmfFitNum;
 
     static Matrix<Double> theta;
     static Matrix<Double> phi;
@@ -133,7 +134,7 @@ public class TIFMF extends MF {
         for (int i = 0; i < userCount; i++) {
             for (int j = 0; j < itemCount; j++) {
                 if (matrix.get(i, j)) {
-                    fitMatrix.set(i, j, 10d);
+                    fitMatrix.set(i, j, Double.valueOf(tifmfFitNum));
                 } else {
                     fitMatrix.set(i, j, 0d);
                 }
@@ -149,6 +150,8 @@ public class TIFMF extends MF {
         File file = new File(inputMatrix);
         if (!file.exists()) {
             file.getParentFile().mkdirs();
+        } else {
+            file.delete();
         }
         PrintWriter printWriter = new PrintWriter(file);
         printWriter.println(fitMatrix.dim1 + "*" + fitMatrix.dim2);
@@ -166,7 +169,7 @@ public class TIFMF extends MF {
         printWriter.close();
     }
 
-    boolean running = false;
+    volatile boolean running = false;
     @Override
     public void iterate() {
         if (!running) {
@@ -191,16 +194,21 @@ public class TIFMF extends MF {
     public void saveModel(String filename) throws IOException {
         Scanner scannerp = new Scanner(new File(pMatrix));
         Matrix<Double> userFactors = getUserFactors();
+
         for (int i = 0; i < userCount; i++) {
+            String line = scannerp.nextLine();
+            String[] lineItems = line.split(" ");
             for (int j = 0; j < numFactors; j++) {
-                userFactors.set(i, j, Double.valueOf(scannerp.next()));
+                userFactors.set(i, j, Double.valueOf(lineItems[j]));
             }
         }
         Scanner scannerq = new Scanner(new File(qMatrix));
         Matrix<Double> itemFactors = getItemFactors();
-        for (int i = 0; i < itemCount; i++) {
-            for (int j = 0; j < numFactors; j++) {
-                itemFactors.set(i, j, Double.valueOf(scannerq.next()));
+        for (int i = 0; i < numFactors; i++) {
+            String line = scannerq.nextLine();
+            String[] lineItems = line.split(" ");
+            for (int j = 0; j < itemCount; j++) {
+                itemFactors.set(j, i, Double.valueOf(lineItems[j]));
             }
         }
         super.saveModel(filename);
@@ -208,11 +216,13 @@ public class TIFMF extends MF {
 
     public static void main(String[] args) throws IOException {
         TIFMF tifmf = new TIFMF();
-        tifmf.pMatrix = "D:/JavaProject/UISMF/data/LdaResult/temp/1517505520532p.txt";
-        tifmf.qMatrix = "D:/JavaProject/UISMF/data/LdaResult/temp/1517505520532q.txt";
-        tifmf.userCount = 3026;
-        tifmf.itemCount = 5195;
+        tifmf.pMatrix = "D:\\JavaProject\\UISMF\\data\\LdaResult\\temp\\1521909851772p.txt";
+        tifmf.qMatrix = "D:\\JavaProject\\UISMF\\data\\LdaResult\\temp\\1521909851772q.txt";
+        tifmf.userCount = 287;
+        tifmf.itemCount = 2607;
         tifmf.numFactors = 16;
+        tifmf.userFactors = new Matrix<Double>(tifmf.userCount, tifmf.numFactors);
+        tifmf.itemFactors = new Matrix<Double>(tifmf.itemCount, tifmf.numFactors);
         tifmf.saveModel("abc.txt");
     }
 

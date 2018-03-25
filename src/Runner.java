@@ -6,6 +6,7 @@ import chosen.nlp.lda.test.LdaTest;
 import chosen.nlp.lda.test.UISTest;
 import chosen.nlp.lda.util.SparseCalculator;
 import com.alibaba.fastjson.JSON;
+import com.gz.TIFMF;
 import org.social.mf.MfGenerator;
 import org.social.test.ItemPredictorMultiTest;
 import org.social.util.Parameter;
@@ -35,6 +36,7 @@ public class Runner {
         FilterDocTest.filterBehind = config.dataFilter;
         MfGenerator.className = config.mfMethod;
         com.gz.TIFMF.pyPath = config.tifmfPath;
+        TIFMF.tifmfFitNum = config.tifmfFitNum;
 
         long totalStart = System.currentTimeMillis();
 
@@ -99,12 +101,12 @@ public class Runner {
         }
 
         if (config.dynamicThread) {
-            ItemPredictorTotal.mfThreadCount = (int) Math.sqrt(config.topicCount);
+            ItemPredictorTotal.multiplyThreadCount = (int) Math.sqrt(config.topicCount);
             ItemPredictorMultiTest.mfThreadCount = (int) Math.sqrt(config.topicCount);
             ItemPredictorMultiTest.sumThreadCount = (int) Math.sqrt(config.topicCount);
         } else {
             ItemPredictorMultiTest.mfThreadCount = config.mfThreadCount;
-            ItemPredictorTotal.mfThreadCount = config.mfThreadCount;
+            ItemPredictorTotal.multiplyThreadCount = config.multiplyThreadCount;
             ItemPredictorMultiTest.sumThreadCount = config.sumThreadCount;
         }
 

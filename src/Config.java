@@ -16,11 +16,12 @@ public class Config {
     public int mfFactors;
     public int mfIter;
     public int mfThreadCount;
+    public int multiplyThreadCount;
     public int sumThreadCount;
     public String dataSetPath;
     public String mfMethod;
     public String tifmfPath;
-
+    public int tifmfFitNum;
 
     @JSONType
     public static class RunModule {
